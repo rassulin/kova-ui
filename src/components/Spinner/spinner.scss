@@ -1,0 +1,9 @@
+@use '../../tokens' as t;
+
+$sizes: ('xs':12px, 'sm':16px, 'md':20px, 'lg':28px, 'xl':40px);
+.k-spinner {
+  display:inline-block; border-radius:50%; border:2px solid rgba(128,128,128,0.2); border-top-color:currentColor; animation:k-spin 0.7s linear infinite; flex-shrink:0;
+  @each $name, $size in $sizes { &-#{$name} { width:$size; height:$size; } }
+  &-xl { border-width: 3px; }
+}
+@keyframes k-spin { to { transform: rotate(360deg); } }

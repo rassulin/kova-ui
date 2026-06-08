@@ -1,0 +1,112 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+
+  "files": {
+    "includes": ["src/**/*.ts", "src/**/*.tsx"],
+    "ignoreUnknown": true
+  },
+
+  "formatter": {
+    "enabled": true,
+    "lineWidth": 120,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf"
+  },
+
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on"
+        }
+      }
+    }
+  },
+
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+
+      "style": {
+        "noUnusedTemplateLiteral": "error",
+        "useConst": "error",
+        "useShorthandAssign": "warn",
+        "useSingleVarDeclarator": "off",
+        "noNegationElse": "warn",
+        "useDefaultParameterLast": "error"
+      },
+
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error",
+        "useHookAtTopLevel": "error",
+        "noConstAssign": "error",
+        "noUndeclaredVariables": "error"
+      },
+
+      "suspicious": {
+        "noExplicitAny": "warn",
+        "noDoubleEquals": "error",
+        "noDuplicateObjectKeys": "error",
+        "noFallthroughSwitchClause": "error"
+      },
+
+      "complexity": {
+        "noBannedTypes": "error",
+        "noForEach": "off",
+        "useSimplifiedLogicExpression": "warn"
+      },
+
+      "a11y": {
+        "useAltText": "error",
+        "useButtonType": "error",
+        "useKeyWithClickEvents": "warn",
+        "noAutofocus": "warn",
+        "useAriaPropsForRole": "error"
+      },
+
+      "performance": {
+        "noDelete": "warn"
+      }
+    }
+  },
+
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "all",
+      "semicolons": "always",
+      "bracketSpacing": true,
+      "bracketSameLine": false,
+      "arrowParentheses": "asNeeded"
+    },
+    "globals": [
+      "document", "window", "localStorage",
+      "navigator", "setTimeout", "clearTimeout", "console"
+    ]
+  },
+
+  "overrides": [
+    {
+      "includes": [
+        "src/**/*.stories.tsx",
+        "src/stories/**/*.tsx",
+        "src/theme/**/*.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": { "noExplicitAny": "off" },
+          "a11y": { "useButtonType": "off" }
+        }
+      }
+    }
+  ]
+}

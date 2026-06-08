@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.storybook-out/
+*.local
+.DS_Store
+.vscode
+.idea
+/.idea/
+/.vscode/

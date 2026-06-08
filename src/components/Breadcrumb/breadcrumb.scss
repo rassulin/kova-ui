@@ -1,0 +1,9 @@
+@use '../../tokens' as t;
+
+.k-breadcrumb {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-family: t.$font-mono; font-size: 12px;
+  &-item    { display: flex; align-items: center; gap: 6px; color: t.$text-muted; }
+  &-link    { color: t.$text-muted; text-decoration: none; transition: color t.$dur-fast; &:hover { color: t.$text; } }
+  &-sep     { color: t.$text-subtle; font-size: 10px; }
+  &-current { color: t.$text; font-weight: 500; }
+}

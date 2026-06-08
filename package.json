@@ -1,0 +1,158 @@
+{
+  "name": "kova-ui",
+  "version": "0.1.0",
+  "description": "A sharp, dark-first Preact component library with killer UX",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles": "./dist/styles/style.css",
+    "./components/Button": {
+      "import": "./dist/esm/components/Button/Button.js",
+      "require": "./dist/cjs/components/Button/Button.js",
+      "types": "./dist/components/Button/Button.d.ts"
+    },
+    "./components/Badge": {
+      "import": "./dist/esm/components/Badge/Badge.js",
+      "require": "./dist/cjs/components/Badge/Badge.js",
+      "types": "./dist/components/Badge/Badge.d.ts"
+    },
+    "./components/Input": {
+      "import": "./dist/esm/components/Input/Input.js",
+      "require": "./dist/cjs/components/Input/Input.js",
+      "types": "./dist/components/Input/Input.d.ts"
+    },
+    "./components/Select": {
+      "import": "./dist/esm/components/Select/Select.js",
+      "require": "./dist/cjs/components/Select/Select.js",
+      "types": "./dist/components/Select/Select.d.ts"
+    },
+    "./components/Switch": {
+      "import": "./dist/esm/components/Switch/Switch.js",
+      "require": "./dist/cjs/components/Switch/Switch.js",
+      "types": "./dist/components/Switch/Switch.d.ts"
+    },
+    "./components/Card": {
+      "import": "./dist/esm/components/Card/Card.js",
+      "require": "./dist/cjs/components/Card/Card.js",
+      "types": "./dist/components/Card/Card.d.ts"
+    },
+    "./components/Avatar": {
+      "import": "./dist/esm/components/Avatar/Avatar.js",
+      "require": "./dist/cjs/components/Avatar/Avatar.js",
+      "types": "./dist/components/Avatar/Avatar.d.ts"
+    },
+    "./components/Spinner": {
+      "import": "./dist/esm/components/Spinner/Spinner.js",
+      "require": "./dist/cjs/components/Spinner/Spinner.js",
+      "types": "./dist/components/Spinner/Spinner.d.ts"
+    },
+    "./components/Tabs": {
+      "import": "./dist/esm/components/Tabs/Tabs.js",
+      "require": "./dist/cjs/components/Tabs/Tabs.js",
+      "types": "./dist/components/Tabs/Tabs.d.ts"
+    },
+    "./components/Breadcrumb": {
+      "import": "./dist/esm/components/Breadcrumb/Breadcrumb.js",
+      "require": "./dist/cjs/components/Breadcrumb/Breadcrumb.js",
+      "types": "./dist/components/Breadcrumb/Breadcrumb.d.ts"
+    },
+    "./components/Menu": {
+      "import": "./dist/esm/components/Menu/Menu.js",
+      "require": "./dist/cjs/components/Menu/Menu.js",
+      "types": "./dist/components/Menu/Menu.d.ts"
+    },
+    "./components/Table": {
+      "import": "./dist/esm/components/Table/Table.js",
+      "require": "./dist/cjs/components/Table/Table.js",
+      "types": "./dist/components/Table/Table.d.ts"
+    },
+    "./components/Modal": {
+      "import": "./dist/esm/components/Modal/Modal.js",
+      "require": "./dist/cjs/components/Modal/Modal.js",
+      "types": "./dist/components/Modal/Modal.d.ts"
+    },
+    "./components/Toast": {
+      "import": "./dist/esm/components/Toast/Toast.js",
+      "require": "./dist/cjs/components/Toast/Toast.js",
+      "types": "./dist/components/Toast/Toast.d.ts"
+    },
+    "./components/Tooltip": {
+      "import": "./dist/esm/components/Tooltip/Tooltip.js",
+      "require": "./dist/cjs/components/Tooltip/Tooltip.js",
+      "types": "./dist/components/Tooltip/Tooltip.d.ts"
+    },
+    "./components/Accordion": {
+      "import": "./dist/esm/components/Accordion/Accordion.js",
+      "require": "./dist/cjs/components/Accordion/Accordion.js",
+      "types": "./dist/components/Accordion/Accordion.d.ts"
+    },
+    "./components/Grid": {
+      "import": "./dist/esm/components/Grid/Grid.js",
+      "require": "./dist/cjs/components/Grid/Grid.js",
+      "types": "./dist/components/Grid/Grid.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly --outDir dist",
+    "dev": "vite",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "lint": "biome check src/",
+    "lint:fix": "biome check --write src/",
+    "format": "biome format --write src/",
+    "check": "biome check src/",
+    "prepare": "simple-git-hooks"
+  },
+  "peerDependencies": {
+    "preact": ">=10.0.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.8.3",
+    "@storybook/addon-essentials": "8.6.18",
+    "@storybook/blocks": "8.6.18",
+    "@storybook/preact": "8.6.18",
+    "@storybook/preact-vite": "8.6.18",
+    "@vitest/browser-playwright": "^4.1.7",
+    "@vitest/coverage-v8": "^4.1.7",
+    "lint-staged": "^17.0.7",
+    "playwright": "^1.60.0",
+    "preact": "^10.22.0",
+    "sass": "^1.100.0",
+    "simple-git-hooks": "^2.13.1",
+    "storybook": "8.6.18",
+    "typescript": "^5.4.0",
+    "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.9.1",
+    "vitest": "^4.1.7"
+  },
+  "keywords": [
+    "preact",
+    "components",
+    "ui",
+    "design-system",
+    "kova"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/kova-ui"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  }
+}

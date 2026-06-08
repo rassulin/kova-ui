@@ -1,0 +1,327 @@
+@use '../../tokens' as t;
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+
+// ── Size scale ────────────────────────────────────────────────────────────────
+// Each step is a (font-size, line-height) pair — they're coupled by design.
+
+$text-sizes: (
+  'xs':  (11px, 1.5),
+  'sm':  (13px, 1.6),
+  'md':  (15px, 1.7),   // default body
+  'lg':  (17px, 1.6),
+  'xl':  (20px, 1.5),
+  '2xl': (24px, 1.4),
+);
+
+$display-sizes: (
+  'sm':  (28px, 1.2, -0.02em),
+  'md':  (36px, 1.15, -0.03em),
+  'lg':  (48px, 1.1,  -0.04em),
+  'xl':  (64px, 1.05, -0.04em),
+);
+
+$weights: (
+  'normal':    400,
+  'medium':    500,
+  'semibold':  600,
+  'bold':      700,
+  'extrabold': 800,
+);
+
+// ── Base reset shared by all typography elements ──────────────────────────────
+%typo-base {
+  margin: 0;
+  padding: 0;
+  font-family: t.$font-display;
+  color: t.$text;
+  transition: color t.$dur-fast;
+}
+
+// ── Headings (H1–H6) ─────────────────────────────────────────────────────────
+
+.k-h1, .k-h2, .k-h3, .k-h4, .k-h5, .k-h6 {
+  @extend %typo-base;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.k-h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -0.04em; }
+.k-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem);  letter-spacing: -0.035em; }
+.k-h3 { font-size: clamp(1.375rem, 2vw, 1.875rem); letter-spacing: -0.025em; }
+.k-h4 { font-size: 1.375rem; letter-spacing: -0.02em; }
+.k-h5 { font-size: 1.125rem; letter-spacing: -0.01em; }
+.k-h6 { font-size: 0.9375rem; letter-spacing: 0; font-weight: 700; }
+
+// ── Display text (hero / marketing) ──────────────────────────────────────────
+
+.k-display {
+  @extend %typo-base;
+  font-weight: 800;
+
+  @each $name, $vals in $display-sizes {
+    &-#{$name} {
+      font-size:      nth($vals, 1);
+      line-height:    nth($vals, 2);
+      letter-spacing: nth($vals, 3);
+    }
+  }
+
+  // Gradient variant
+  &-gradient {
+    background: linear-gradient(135deg, t.$text 0%, rgba(245, 245, 247, 0.7) 60%, t.$accent-light 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+// ── Body text ─────────────────────────────────────────────────────────────────
+
+.k-text {
+  @extend %typo-base;
+  font-family: t.$font-display;
+  font-weight: 400;
+  line-height: 1.7;
+  font-size: 15px;
+
+  // Size variants
+  @each $name, $vals in $text-sizes {
+    &-#{$name} {
+      font-size:   nth($vals, 1);
+      line-height: nth($vals, 2);
+    }
+  }
+
+  // Weight modifiers
+  @each $name, $val in $weights {
+    &-#{$name} { font-weight: $val; }
+  }
+
+  // Color modifiers
+  &-muted  { color: t.$text-muted; }
+  &-subtle { color: t.$text-subtle; }
+  &-accent { color: t.$accent-light; }
+  &-success { color: t.$green; }
+  &-danger  { color: t.$red; }
+  &-warning { color: t.$amber; }
+
+  // Mono
+  &-mono { font-family: t.$font-mono; }
+
+  // Truncate
+  &-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Uppercase label style
+  &-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: t.$text-muted;
+  }
+}
+
+// ── Mono / Code inline ────────────────────────────────────────────────────────
+
+.k-mono {
+  @extend %typo-base;
+  font-family: t.$font-mono;
+  font-size: 13px;
+  line-height: 1.6;
+  color: t.$text-muted;
+}
+
+// ── Link ──────────────────────────────────────────────────────────────────────
+
+.k-link {
+  color: t.$accent-light;
+  text-decoration: none;
+  font-family: t.$font-display;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: color t.$dur-fast;
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline;
+
+  // Animated underline
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    background: t.$accent;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform t.$dur-base t.$ease;
+  }
+
+  &:hover {
+    color: t.$accent;
+    &::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  // Variants
+  &-muted {
+    color: t.$text-muted;
+    &::after { background: t.$text-muted; }
+    &:hover  { color: t.$text; }
+  }
+
+  &-danger {
+    color: t.$red;
+    &::after { background: t.$red; }
+    &:hover  { color: t.$red; }
+  }
+
+  // External arrow
+  &-external::after { content: none; }
+  &-external::before {
+    content: ' ↗';
+    font-size: 0.8em;
+    opacity: 0.7;
+  }
+}
+
+// ── Blockquote ────────────────────────────────────────────────────────────────
+
+.k-blockquote {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid t.$accent;
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 0 var(--k-r-md) var(--k-r-md) 0;
+  font-family: t.$font-display;
+  font-size: 15px;
+  line-height: 1.7;
+  color: t.$text-muted;
+  font-style: italic;
+
+  cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 12px;
+    font-style: normal;
+    color: t.$text-subtle;
+    font-family: t.$font-mono;
+
+    &::before { content: '— '; }
+  }
+}
+
+// ── Banner ────────────────────────────────────────────────────────────────────
+
+$banner-variants: (
+  'info':    (rgba(139, 92, 246, 0.08), t.$accent,       rgba(139, 92, 246, 0.25), t.$accent-light),
+  'success': (rgba(74, 222, 128, 0.07), t.$green,        rgba(74, 222, 128, 0.2),  t.$green),
+  'warning': (rgba(251, 191, 36, 0.08), t.$amber,        rgba(251, 191, 36, 0.2),  t.$amber),
+  'danger':  (rgba(248, 113, 113, 0.08), t.$red,         rgba(248, 113, 113, 0.2), t.$red),
+  'neutral': (t.$surface-2, t.$text-subtle, t.$border, t.$text-muted),
+);
+
+.k-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--k-r-lg);
+  border: 0.5px solid;
+  position: relative;
+  overflow: hidden;
+
+  @each $name, $vals in $banner-variants {
+    &-#{$name} {
+      background:   nth($vals, 1);
+      border-color: nth($vals, 3);
+
+      .k-banner-icon  { color: nth($vals, 2); }
+      .k-banner-title { color: nth($vals, 4); }
+    }
+  }
+
+  &-icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  &-body   { flex: 1; }
+
+  &-title  {
+    font-family: t.$font-display;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+
+  &-desc {
+    font-family: t.$font-mono;
+    font-size: 12px;
+    color: t.$text-muted;
+    line-height: 1.6;
+  }
+
+  &-dismiss {
+    background: transparent;
+    border: none;
+    color: t.$text-subtle;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    flex-shrink: 0;
+    transition: color t.$dur-fast;
+
+    &:hover { color: t.$text; }
+  }
+}
+
+// ── Keyboard shortcut (contextual) ───────────────────────────────────────────
+
+.k-label-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: t.$font-mono;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  background: t.$surface-3;
+  border: 0.5px solid t.$border;
+  border-bottom-width: 2px;
+  border-radius: var(--k-r-sm);
+  color: t.$text-muted;
+  letter-spacing: 0.03em;
+}
+
+// ── Divider with label ────────────────────────────────────────────────────────
+
+.k-divider-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: t.$text-subtle;
+  font-family: t.$font-mono;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: t.$border;
+  }
+}

@@ -1,0 +1,36 @@
+@use '../../tokens' as t;
+
+// ─── Icon ─────────────────────────────────────────────────────────────────────
+
+.k-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  transition: stroke t.$dur-fast, fill t.$dur-fast;
+
+  &-xs { width: 12px; height: 12px; }
+  &-sm { width: 14px; height: 14px; }
+  &-md { width: 16px; height: 16px; }
+  &-lg { width: 20px; height: 20px; }
+  &-xl { width: 24px; height: 24px; }
+
+  &-accent  { color: t.$accent; }
+  &-muted   { color: t.$text-muted; }
+  &-success { color: t.$green; }
+  &-warning { color: t.$amber; }
+  &-danger  { color: t.$red; }
+  &-cyan    { color: t.$cyan; }
+}
+
+.k-icon-spin {
+  animation: k-icon-spin 0.7s linear infinite;
+}
+
+@keyframes k-icon-spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,217 @@
+@use '../../tokens' as t;
+
+// ─── DatePicker ───────────────────────────────────────────────────────────────
+
+.k-dp {
+  &-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    width: 100%;
+  }
+
+  &-input-row { position: relative; }
+
+  &-input {
+    padding-right: 40px !important;
+    cursor: pointer;
+    caret-color: transparent; // input is readonly, hide caret
+  }
+
+  &-icon-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: t.$text-muted;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: color t.$dur-fast;
+
+    &:hover { color: t.$text; }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+
+  // ── Popover calendar ───────────────────────────────────────────────────────
+  &-popover {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 1000;
+    background: t.$surface-1;
+    border: 0.5px solid t.$border;
+    border-radius: var(--k-r-lg);
+    box-shadow: t.$shadow-lg;
+    padding: 12px;
+    width: 280px;
+    animation: k-dp-in 150ms t.$ease both;
+  }
+
+  // ── Header ─────────────────────────────────────────────────────────────────
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  &-heading {
+    font-family: t.$font-display;
+    font-size: 13px;
+    font-weight: 700;
+    color: t.$text;
+    letter-spacing: -0.01em;
+  }
+
+  &-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--k-r-sm);
+    border: 0.5px solid t.$border;
+    background: transparent;
+    color: t.$text-muted;
+    cursor: pointer;
+    transition: background t.$dur-fast, color t.$dur-fast, border-color t.$dur-fast;
+
+    &:hover {
+      background: t.$surface-2;
+      color: t.$text;
+      border-color: t.$border-hover;
+    }
+  }
+
+  // ── 7-column grid ──────────────────────────────────────────────────────────
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  &-day-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    font-family: t.$font-display;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: t.$text-subtle;
+    margin-bottom: 2px;
+  }
+
+  // ── Day cells ──────────────────────────────────────────────────────────────
+  &-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    border-radius: var(--k-r-sm);
+    border: none;
+    background: transparent;
+    font-family: t.$font-mono;
+    font-size: 12px;
+    color: t.$text;
+    cursor: pointer;
+    transition: background t.$dur-fast, color t.$dur-fast;
+
+    &:hover:not(:disabled):not(.k-dp-cell--selected) {
+      background: t.$surface-2;
+    }
+
+    // Outside current month
+    &--outside {
+      color: t.$text-subtle;
+      opacity: 0.5;
+    }
+
+    // Today marker
+    &--today:not(.k-dp-cell--selected) {
+      color: t.$accent-light;
+      font-weight: 600;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: t.$accent;
+      }
+    }
+
+    // Selected
+    &--selected {
+      background: t.$accent;
+      color: #fff;
+      font-weight: 600;
+
+      &:hover { background: t.$accent-light; }
+    }
+
+    // Disabled
+    &--disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    // Needed for today dot
+    position: relative;
+  }
+
+  // ── Footer ─────────────────────────────────────────────────────────────────
+  &-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 0.5px solid t.$border;
+  }
+
+  &-today-btn,
+  &-clear-btn {
+    font-family: t.$font-display;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--k-r-sm);
+    padding: 4px 10px;
+    transition: background t.$dur-fast, color t.$dur-fast;
+
+    &:disabled { opacity: 0.35; cursor: not-allowed; }
+  }
+
+  &-today-btn {
+    color: t.$accent-light;
+    &:hover:not(:disabled) { background: t.$accent-glow; }
+  }
+
+  &-clear-btn {
+    color: t.$text-muted;
+    &:hover { background: t.$surface-2; color: t.$text; }
+  }
+}
+
+@keyframes k-dp-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}

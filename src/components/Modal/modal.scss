@@ -1,0 +1,25 @@
+@use '../../tokens' as t;
+
+.k-modal {
+  &-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center; z-index: 9000; padding: 16px;
+    animation: k-overlay-in t.$dur-base t.$ease both;
+  }
+  background: t.$surface-1; border: 0.5px solid t.$border; border-radius: var(--k-r-xl);
+  box-shadow: t.$shadow-lg; width: 100%; max-height: 90vh; overflow-y: auto;
+  animation: k-modal-in t.$dur-slow t.$ease both; position: relative;
+  &-sm { max-width: 380px; } &-md { max-width: 520px; } &-lg { max-width: 720px; } &-xl { max-width: 960px; }
+  &-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.5rem 1.5rem 0; gap: 12px; }
+  &-title  { font-family: t.$font-display; font-size: 20px; font-weight: 800; color: t.$text; letter-spacing: -0.02em; }
+  &-close  {
+    width: 32px; height: 32px; border-radius: var(--k-r-md); border: 0.5px solid t.$border;
+    background: transparent; color: t.$text-muted; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background t.$dur-fast, color t.$dur-fast; flex-shrink: 0;
+    &:hover { background: t.$surface-3; color: t.$text; }
+  }
+  &-body   { padding: 1rem 1.5rem 1.5rem; color: t.$text-muted; font-size: 14px; line-height: 1.7; }
+  &-footer { padding: 0 1.5rem 1.5rem; display: flex; justify-content: flex-end; gap: 8px; }
+}
+@keyframes k-overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes k-modal-in { from { opacity: 0; transform: scale(0.94) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }

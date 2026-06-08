@@ -1,0 +1,74 @@
+@use '../../tokens' as t;
+
+// ─── Tooltip ─────────────────────────────────────────────────────────────────
+
+.k-tooltip {
+  &-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+
+  position: absolute;
+  background: t.$surface-3;
+  border: 0.5px solid t.$border;
+  border-radius: var(--k-r-md);
+  padding: 6px 12px;
+  font-family: t.$font-mono;
+  font-size: 11px;
+  color: t.$text;
+  white-space: nowrap;
+  box-shadow: t.$shadow-md;
+  pointer-events: none;
+  z-index: 8000;
+
+  // ── Placements ─────────────────────────────────────────────────────────────
+  // Each placement gets its own animation so transform isn't fighting itself
+
+  &-top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    animation: k-tooltip-in-top 120ms t.$ease both;
+  }
+
+  &-bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    animation: k-tooltip-in-bottom 120ms t.$ease both;
+  }
+
+  &-left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    animation: k-tooltip-in-left 120ms t.$ease both;
+  }
+
+  &-right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    animation: k-tooltip-in-right 120ms t.$ease both;
+  }
+}
+
+@keyframes k-tooltip-in-top {
+  from { opacity: 0; bottom: calc(100% + 4px); }
+  to   { opacity: 1; bottom: calc(100% + 8px); }
+}
+
+@keyframes k-tooltip-in-bottom {
+  from { opacity: 0; top: calc(100% + 4px); }
+  to   { opacity: 1; top: calc(100% + 8px); }
+}
+
+@keyframes k-tooltip-in-left {
+  from { opacity: 0; right: calc(100% + 4px); }
+  to   { opacity: 1; right: calc(100% + 8px); }
+}
+
+@keyframes k-tooltip-in-right {
+  from { opacity: 0; left: calc(100% + 4px); }
+  to   { opacity: 1; left: calc(100% + 8px); }
+}

@@ -1,0 +1,44 @@
+@use '../../tokens' as t;
+
+@mixin input-base {
+  width: 100%;
+  background: t.$surface-2;
+  border: 0.5px solid t.$border;
+  border-radius: var(--k-r-md);
+  color: t.$text;
+  font-family: t.$font-mono;
+  font-size: 13px;
+  outline: none;
+  transition: border-color t.$dur-base, box-shadow t.$dur-base;
+  -webkit-appearance: none;
+
+  &::placeholder { color: t.$text-subtle; }
+  &:hover        { border-color: t.$border-hover; }
+  &:focus        { border-color: t.$accent; box-shadow: 0 0 0 3px t.$accent-glow; }
+}
+
+.k-input-wrap { display: flex; flex-direction: column; gap: 6px; }
+.k-label      { font-family: t.$font-display; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: t.$text-muted; }
+.k-input-field-wrap { position: relative; display: flex; align-items: center; }
+
+.k-input {
+  @include input-base;
+  height: 40px;
+  padding: 0 14px;
+
+  &-sm { height: 34px; font-size: 12px; }
+  &-lg { height: 48px; font-size: 14px; border-radius: var(--k-r-lg); }
+  &-has-prefix { padding-left: 38px; }
+  &-has-suffix { padding-right: 38px; }
+  &-error {
+    border-color: t.$red !important;
+    &:focus { box-shadow: 0 0 0 3px rgba(248,113,113,0.2) !important; }
+  }
+}
+
+textarea.k-input { height: auto; padding: 12px 14px; resize: vertical; min-height: 96px; line-height: 1.6; }
+
+.k-input-prefix { position: absolute; left: 12px; color: t.$text-muted; pointer-events: none; display: flex; }
+.k-input-suffix { position: absolute; right: 12px; color: t.$text-muted; display: flex; cursor: pointer; }
+.k-hint         { font-size: 12px; color: t.$text-muted; font-family: t.$font-mono; }
+.k-error-msg    { font-size: 12px; color: t.$red; font-family: t.$font-mono; }

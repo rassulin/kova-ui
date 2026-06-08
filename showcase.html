@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kova-ui — Component Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --k-black:#080808;--k-void:#0d0d0f;--k-surface-1:#111114;--k-surface-2:#18181c;--k-surface-3:#222228;
+  --k-border:rgba(255,255,255,0.07);--k-border-hover:rgba(255,255,255,0.14);--k-border-focus:rgba(139,92,246,0.6);
+  --k-white:#f5f5f7;--k-muted:#8b8b99;--k-subtle:#55555f;
+  --k-accent:#8b5cf6;--k-accent-glow:rgba(139,92,246,0.25);--k-accent-light:#a78bfa;
+  --k-cyan:#22d3ee;--k-cyan-glow:rgba(34,211,238,0.2);
+  --k-green:#4ade80;--k-amber:#fbbf24;--k-red:#f87171;--k-pink:#f472b6;
+  --k-font-display:'Syne',sans-serif;--k-font-mono:'DM Mono',monospace;
+  --k-r-sm:6px;--k-r-md:10px;--k-r-lg:16px;--k-r-xl:24px;--k-r-pill:9999px;
+  --k-ease:cubic-bezier(0.16,1,0.3,1);--k-ease-snappy:cubic-bezier(0.4,0,0.2,1);
+}
+
+html{background:var(--k-void);color:var(--k-white);font-family:var(--k-font-display)}
+body{min-height:100vh;overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{
+  position:relative;min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:2rem;
+  overflow:hidden;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
+}
+.hero-glow{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);
+  width:600px;height:400px;border-radius:50%;
+  background:radial-gradient(ellipse, rgba(139,92,246,0.15) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-glow-2{
+  position:absolute;top:30%;left:30%;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(ellipse, rgba(34,211,238,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border-radius:var(--k-r-pill);
+  background:rgba(139,92,246,0.12);border:0.5px solid rgba(139,92,246,0.3);
+  font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--k-accent-light);margin-bottom:2rem;
+  animation:fade-up 0.8s var(--k-ease) 0.1s both;
+}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--k-accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+
+.hero h1{
+  font-size:clamp(3.5rem,8vw,7rem);font-weight:800;line-height:0.95;
+  letter-spacing:-0.04em;
+  background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,0.7) 60%,var(--k-accent-light) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:fade-up 0.8s var(--k-ease) 0.2s both;margin-bottom:0.5rem;
+}
+.hero-sub{
+  font-size:clamp(1rem,2vw,1.2rem);color:var(--k-muted);font-family:var(--k-font-mono);
+  font-weight:400;margin-bottom:2.5rem;max-width:500px;line-height:1.6;
+  animation:fade-up 0.8s var(--k-ease) 0.35s both;
+}
+.hero-cta{display:flex;gap:12px;justify-content:center;animation:fade-up 0.8s var(--k-ease) 0.5s both;flex-wrap:wrap}
+.hero-stat{
+  margin-top:4rem;display:flex;gap:3rem;animation:fade-up 0.8s var(--k-ease) 0.65s both;flex-wrap:wrap;justify-content:center;
+}
+.hero-stat-item{text-align:center}
+.hero-stat-val{font-size:1.75rem;font-weight:800;letter-spacing:-0.02em;color:var(--k-white)}
+.hero-stat-label{font-size:11px;color:var(--k-subtle);font-family:var(--k-font-mono);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
+.hero-divider{width:1px;background:var(--k-border);align-self:stretch}
+
+@keyframes fade-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--k-subtle);font-size:11px;font-family:var(--k-font-mono);animation:fade-up 1s var(--k-ease) 1s both}
+.scroll-arrow{animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── SECTION ── */
+.section{max-width:1200px;margin:0 auto;padding:5rem 2rem}
+.section-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--k-accent-light);margin-bottom:0.75rem;font-family:var(--k-font-mono)}
+.section-title{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:0.5rem}
+.section-desc{font-size:14px;color:var(--k-muted);font-family:var(--k-font-mono);max-width:480px;line-height:1.7;margin-bottom:3rem}
+.section-sep{height:0.5px;background:linear-gradient(90deg,transparent,var(--k-border) 20%,var(--k-border) 80%,transparent);margin:5rem 0}
+
+/* ── DEMO GRID ── */
+.demo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--k-border);border:0.5px solid var(--k-border);border-radius:var(--k-r-xl);overflow:hidden}
+.demo-cell{background:var(--k-surface-1);padding:2rem;display:flex;flex-direction:column;gap:1rem;transition:background 200ms}
+.demo-cell:hover{background:var(--k-surface-2)}
+.demo-cell-title{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--k-subtle);margin-bottom:0.5rem;font-family:var(--k-font-mono)}
+.demo-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* ── BUTTONS ── */
+.k-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--k-font-display);font-weight:600;font-size:13px;letter-spacing:0.03em;text-transform:uppercase;border:none;border-radius:var(--k-r-md);cursor:pointer;position:relative;overflow:hidden;transition:transform 120ms var(--k-ease),box-shadow 200ms var(--k-ease);white-space:nowrap;text-decoration:none;user-select:none}
+.k-btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background 120ms}
+.k-btn:hover::before{background:rgba(255,255,255,0.06)}
+.k-btn:active{transform:scale(0.97)}
+.k-btn-xs{height:28px;padding:0 12px;font-size:11px}
+.k-btn-sm{height:34px;padding:0 16px;font-size:12px}
+.k-btn-md{height:40px;padding:0 20px}
+.k-btn-lg{height:48px;padding:0 28px;font-size:14px;border-radius:var(--k-r-lg)}
+.k-btn-solid{background:var(--k-accent);color:#fff}
+.k-btn-solid:hover{box-shadow:0 0 0 1px var(--k-accent),0 0 20px var(--k-accent-glow)}
+.k-btn-cyan{background:var(--k-cyan);color:var(--k-black)}
+.k-btn-cyan:hover{box-shadow:0 0 0 1px var(--k-cyan),0 0 20px var(--k-cyan-glow)}
+.k-btn-ghost{background:transparent;color:var(--k-white);border:0.5px solid var(--k-border);box-shadow:0 1px 3px rgba(0,0,0,0.5)}
+.k-btn-ghost:hover{border-color:var(--k-border-hover)}
+.k-btn-outline{background:transparent;color:var(--k-accent-light);border:1px solid var(--k-accent)}
+.k-btn-outline:hover{background:var(--k-accent-glow)}
+.k-btn-danger{background:rgba(248,113,113,0.15);color:var(--k-red);border:0.5px solid rgba(248,113,113,0.3)}
+.k-btn-success{background:rgba(74,222,128,0.12);color:var(--k-green);border:0.5px solid rgba(74,222,128,0.25)}
+
+/* ── BADGE ── */
+.k-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--k-font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:var(--k-r-pill);line-height:1}
+.k-badge-dot::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block}
+.k-badge-default{background:var(--k-surface-3);color:var(--k-muted);border:0.5px solid var(--k-border)}
+.k-badge-accent{background:rgba(139,92,246,0.18);color:var(--k-accent-light);border:0.5px solid rgba(139,92,246,0.3)}
+.k-badge-cyan{background:rgba(34,211,238,0.12);color:var(--k-cyan);border:0.5px solid rgba(34,211,238,0.25)}
+.k-badge-success{background:rgba(74,222,128,0.1);color:var(--k-green);border:0.5px solid rgba(74,222,128,0.2)}
+.k-badge-warning{background:rgba(251,191,36,0.1);color:var(--k-amber);border:0.5px solid rgba(251,191,36,0.2)}
+.k-badge-danger{background:rgba(248,113,113,0.1);color:var(--k-red);border:0.5px solid rgba(248,113,113,0.2)}
+.k-badge-pink{background:rgba(244,114,182,0.1);color:var(--k-pink);border:0.5px solid rgba(244,114,182,0.2)}
+
+/* ── CARD ── */
+.k-card{background:var(--k-surface-1);border:0.5px solid var(--k-border);border-radius:var(--k-r-lg);padding:1.5rem;position:relative;overflow:hidden;transition:border-color 200ms,box-shadow 200ms}
+.k-card:hover{border-color:var(--k-border-hover);box-shadow:0 4px 16px rgba(0,0,0,0.6)}
+.k-card-glow{border-color:rgba(139,92,246,0.3);box-shadow:0 0 40px var(--k-accent-glow)}
+.k-card-title{font-family:var(--k-font-display);font-size:16px;font-weight:700;color:var(--k-white);letter-spacing:-0.01em}
+.k-card-subtitle{font-size:13px;color:var(--k-muted);margin-top:4px;font-family:var(--k-font-mono)}
+.k-card-body{color:var(--k-muted);font-size:14px;line-height:1.7;margin-top:0.75rem}
+
+/* ── INPUT ── */
+.k-input{width:100%;height:40px;background:var(--k-surface-2);border:0.5px solid var(--k-border);border-radius:var(--k-r-md);color:var(--k-white);font-family:var(--k-font-mono);font-size:13px;padding:0 14px;outline:none;transition:border-color 200ms,box-shadow 200ms;-webkit-appearance:none}
+.k-input::placeholder{color:var(--k-subtle)}
+.k-input:hover{border-color:var(--k-border-hover)}
+.k-input:focus{border-color:var(--k-accent);box-shadow:0 0 0 3px var(--k-accent-glow)}
+.k-label{font-family:var(--k-font-display);font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--k-muted);display:block;margin-bottom:6px}
+.k-input-wrap{display:flex;flex-direction:column;gap:0}
+.k-hint{font-size:12px;color:var(--k-muted);font-family:var(--k-font-mono);margin-top:5px}
+
+/* ── SWITCH ── */
+.k-switch-wrap{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.k-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.k-switch input{opacity:0;width:0;height:0;position:absolute}
+.k-switch-track{position:absolute;inset:0;background:var(--k-surface-3);border:0.5px solid var(--k-border);border-radius:9999px;transition:background 200ms,border-color 200ms,box-shadow 200ms}
+.k-switch-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:var(--k-muted);border-radius:50%;transition:transform 200ms var(--k-ease),background 200ms}
+.k-switch input:checked~.k-switch-track{background:var(--k-accent);border-color:var(--k-accent);box-shadow:0 0 12px var(--k-accent-glow)}
+.k-switch input:checked~.k-switch-thumb{transform:translateX(20px);background:#fff}
+.k-switch-label{font-family:var(--k-font-display);font-size:13px;color:var(--k-white);font-weight:500}
+
+/* ── TABLE ── */
+.k-table-wrap{width:100%;overflow-x:auto;border:0.5px solid var(--k-border);border-radius:var(--k-r-lg);background:var(--k-surface-1)}
+.k-table{width:100%;border-collapse:collapse;font-family:var(--k-font-mono);font-size:13px}
+.k-table thead th{padding:10px 16px;text-align:left;font-family:var(--k-font-display);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--k-subtle);background:var(--k-surface-2);border-bottom:0.5px solid var(--k-border)}
+.k-table tbody tr{transition:background 120ms;border-bottom:0.5px solid var(--k-border)}
+.k-table tbody tr:last-child{border-bottom:none}
+.k-table tbody tr:hover{background:var(--k-surface-2)}
+.k-table td{padding:12px 16px;color:var(--k-white);vertical-align:middle}
+
+/* ── TABS ── */
+.k-tab-list{display:flex;gap:2px;padding:3px;background:var(--k-surface-2);border:0.5px solid var(--k-border);border-radius:var(--k-r-md);width:fit-content}
+.k-tab{padding:7px 16px;font-family:var(--k-font-display);font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--k-muted);background:transparent;border:none;border-radius:var(--k-r-sm);cursor:pointer;transition:color 120ms,background 120ms;white-space:nowrap}
+.k-tab:hover{color:var(--k-white)}
+.k-tab-active{color:var(--k-white);background:var(--k-surface-3);box-shadow:0 1px 3px rgba(0,0,0,0.5)}
+
+/* ── AVATAR ── */
+.k-avatar{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-family:var(--k-font-display);font-weight:700;overflow:hidden;flex-shrink:0;border:1.5px solid var(--k-border)}
+.k-avatar-sm{width:32px;height:32px;font-size:11px}
+.k-avatar-md{width:40px;height:40px;font-size:14px}
+.k-avatar-lg{width:56px;height:56px;font-size:18px}
+.k-avatar-group{display:flex}
+.k-avatar-group .k-avatar{margin-left:-8px;box-shadow:0 0 0 2px var(--k-surface-1)}
+.k-avatar-group .k-avatar:first-child{margin-left:0}
+
+/* ── BREADCRUMB ── */
+.k-breadcrumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--k-font-mono);font-size:12px}
+.k-bc-link{color:var(--k-muted);text-decoration:none;transition:color 120ms}
+.k-bc-link:hover{color:var(--k-white)}
+.k-bc-sep{color:var(--k-subtle);font-size:10px}
+.k-bc-current{color:var(--k-white);font-weight:500}
+
+/* ── PROGRESS ── */
+.k-progress{height:4px;background:var(--k-surface-3);border-radius:9999px;overflow:hidden}
+.k-progress-bar{height:100%;background:var(--k-accent);border-radius:9999px;position:relative;overflow:hidden}
+.k-progress-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.k-progress-glow .k-progress-bar{box-shadow:0 0 8px var(--k-accent-glow)}
+
+/* ── SKELETON ── */
+.k-skeleton{background:var(--k-surface-2);border-radius:var(--k-r-md);position:relative;overflow:hidden;display:block}
+.k-skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.04),transparent);animation:shimmer 1.8s ease-in-out infinite}
+
+/* ── KBD / CODE ── */
+.k-kbd{display:inline-flex;align-items:center;font-family:var(--k-font-mono);font-size:11px;font-weight:500;padding:2px 8px;background:var(--k-surface-3);border:0.5px solid var(--k-border);border-bottom-width:2px;border-radius:var(--k-r-sm);color:var(--k-muted)}
+.k-code{font-family:var(--k-font-mono);font-size:12px;background:var(--k-surface-2);border:0.5px solid var(--k-border);border-radius:var(--k-r-sm);padding:2px 7px;color:var(--k-cyan)}
+
+/* ── TOOLTIP ── */
+.k-tooltip-wrap{position:relative;display:inline-flex}
+.k-tooltip{position:absolute;background:var(--k-surface-3);border:0.5px solid var(--k-border);border-radius:var(--k-r-md);padding:6px 12px;font-family:var(--k-font-mono);font-size:11px;color:var(--k-white);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.6);pointer-events:none;animation:tooltip-in 120ms var(--k-ease) both;z-index:100;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%)}
+@keyframes tooltip-in{from{opacity:0;transform:translateX(-50%) scale(0.94)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+
+/* ── MENU ── */
+.k-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:200px;background:var(--k-surface-2);border:0.5px solid var(--k-border);border-radius:var(--k-r-lg);box-shadow:0 12px 48px rgba(0,0,0,0.8);padding:6px;z-index:100;animation:menu-in 200ms var(--k-ease) both}
+@keyframes menu-in{from{opacity:0;transform:translateY(-6px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.k-menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--k-r-md);font-family:var(--k-font-display);font-size:13px;font-weight:500;color:var(--k-white);cursor:pointer;transition:background 120ms;border:none;background:transparent;width:100%;text-align:left}
+.k-menu-item:hover{background:var(--k-surface-3)}
+.k-menu-item-danger{color:var(--k-red)}
+.k-menu-item-danger:hover{background:rgba(248,113,113,0.1)}
+.k-menu-sep{height:0.5px;background:var(--k-border);margin:4px 0}
+.k-menu-label-hd{padding:6px 12px 4px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--k-font-display);font-weight:700;color:var(--k-subtle)}
+
+/* ── ACCORDION ── */
+.k-accordion{display:flex;flex-direction:column;border:0.5px solid var(--k-border);border-radius:var(--k-r-lg);overflow:hidden}
+.k-acc-item{border-bottom:0.5px solid var(--k-border)}
+.k-acc-item:last-child{border-bottom:none}
+.k-acc-trigger{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:transparent;border:none;color:var(--k-white);font-family:var(--k-font-display);font-size:14px;font-weight:600;cursor:pointer;width:100%;text-align:left;transition:background 120ms}
+.k-acc-trigger:hover{background:var(--k-surface-2)}
+.k-acc-chevron{transition:transform 200ms var(--k-ease);color:var(--k-muted);flex-shrink:0}
+.k-acc-open .k-acc-chevron{transform:rotate(180deg)}
+.k-acc-body{overflow:hidden;transition:max-height 350ms var(--k-ease)}
+.k-acc-content{padding:4px 20px 20px;font-family:var(--k-font-mono);font-size:13px;color:var(--k-muted);line-height:1.7}
+
+/* ── MODAL ── */
+.k-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:9000;padding:16px;animation:overlay-in 200ms var(--k-ease) both}
+@keyframes overlay-in{from{opacity:0}to{opacity:1}}
+.k-modal-box{background:var(--k-surface-1);border:0.5px solid var(--k-border);border-radius:var(--k-r-xl);box-shadow:0 12px 48px rgba(0,0,0,0.8);width:100%;max-width:520px;animation:modal-in 350ms var(--k-ease) both;position:relative}
+@keyframes modal-in{from{opacity:0;transform:scale(0.94) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.k-modal-header{display:flex;align-items:flex-start;justify-content:space-between;padding:1.5rem 1.5rem 0;gap:12px}
+.k-modal-title{font-family:var(--k-font-display);font-size:20px;font-weight:800;color:var(--k-white);letter-spacing:-0.02em}
+.k-modal-close{width:32px;height:32px;border-radius:var(--k-r-md);border:0.5px solid var(--k-border);background:transparent;color:var(--k-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 120ms,color 120ms;flex-shrink:0}
+.k-modal-close:hover{background:var(--k-surface-3);color:var(--k-white)}
+.k-modal-body{padding:1rem 1.5rem 1.5rem;color:var(--k-muted);font-family:var(--k-font-mono);font-size:14px;line-height:1.7}
+.k-modal-footer{padding:0 1.5rem 1.5rem;display:flex;justify-content:flex-end;gap:8px}
+
+/* ── TOAST ── */
+.k-toast-container{position:fixed;top:16px;right:16px;display:flex;flex-direction:column;gap:8px;z-index:9999;pointer-events:none}
+.k-toast{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:var(--k-surface-2);border:0.5px solid var(--k-border);border-radius:var(--k-r-lg);box-shadow:0 12px 48px rgba(0,0,0,0.8);min-width:300px;max-width:400px;pointer-events:all;animation:toast-in 350ms var(--k-ease) both;position:relative;overflow:hidden}
+@keyframes toast-in{from{opacity:0;transform:translateX(16px) scale(0.97)}to{opacity:1;transform:translateX(0) scale(1)}}
+.k-toast-exit{animation:toast-out 200ms var(--k-ease-snappy) both}
+@keyframes toast-out{to{opacity:0;transform:translateX(16px) scale(0.96)}}
+.k-toast-title{font-family:var(--k-font-display);font-size:13px;font-weight:700;color:var(--k-white)}
+.k-toast-msg{font-family:var(--k-font-mono);font-size:12px;color:var(--k-muted);margin-top:3px;line-height:1.5}
+.k-toast-icon{flex-shrink:0;margin-top:1px}
+.k-toast-close-btn{background:transparent;border:none;color:var(--k-muted);cursor:pointer;display:flex;flex-shrink:0;padding:0}
+.k-toast-close-btn:hover{color:var(--k-white)}
+.k-toast-bar{position:absolute;bottom:0;left:0;height:2px;background:currentColor;transform-origin:left;animation:toast-bar var(--dur,4s) linear}
+@keyframes toast-bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.k-toast-success{color:var(--k-green);border-color:rgba(74,222,128,0.2)}
+.k-toast-error{color:var(--k-red);border-color:rgba(248,113,113,0.2)}
+.k-toast-warning{color:var(--k-amber);border-color:rgba(251,191,36,0.2)}
+.k-toast-info{color:var(--k-accent-light);border-color:rgba(139,92,246,0.2)}
+
+/* ── FEATURE SECTION ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--k-border);border-radius:var(--k-r-xl);overflow:hidden;border:0.5px solid var(--k-border)}
+.feature-card{background:var(--k-surface-1);padding:2rem;transition:background 200ms}
+.feature-card:hover{background:var(--k-surface-2)}
+.feature-icon{width:40px;height:40px;border-radius:var(--k-r-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:18px}
+.feature-title{font-size:15px;font-weight:700;margin-bottom:6px;letter-spacing:-0.01em}
+.feature-desc{font-family:var(--k-font-mono);font-size:13px;color:var(--k-muted);line-height:1.7}
+
+/* ── INSTALL SECTION ── */
+.install-box{background:var(--k-surface-1);border:0.5px solid var(--k-border);border-radius:var(--k-r-xl);padding:3rem;text-align:center;position:relative;overflow:hidden}
+.install-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 100%, rgba(139,92,246,0.08) 0%, transparent 70%);pointer-events:none}
+.install-cmd{display:inline-flex;align-items:center;gap:12px;background:var(--k-surface-2);border:0.5px solid var(--k-border);border-radius:var(--k-r-lg);padding:1rem 1.5rem;font-family:var(--k-font-mono);font-size:16px;color:var(--k-white);cursor:pointer;transition:border-color 200ms;margin:2rem 0;position:relative;z-index:1}
+.install-cmd:hover{border-color:var(--k-border-hover)}
+.install-cmd span{color:var(--k-accent-light)}
+.copy-badge{position:absolute;top:-8px;right:-8px;background:var(--k-green);color:var(--k-black);font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--k-r-pill);font-family:var(--k-font-display);letter-spacing:0.06em;text-transform:uppercase;opacity:0;transition:opacity 200ms}
+.copy-badge.show{opacity:1}
+
+/* ── FOOTER ── */
+footer{border-top:0.5px solid var(--k-border);padding:2rem;text-align:center;font-family:var(--k-font-mono);font-size:12px;color:var(--k-subtle)}
+footer a{color:var(--k-muted);text-decoration:none;transition:color 120ms}
+footer a:hover{color:var(--k-white)}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--k-border);background:rgba(8,8,8,0.8);backdrop-filter:blur(12px)}
+.nav-logo{font-size:18px;font-weight:800;letter-spacing:-0.03em;color:var(--k-white)}
+.nav-logo span{color:var(--k-accent)}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-link{font-family:var(--k-font-mono);font-size:12px;color:var(--k-muted);text-decoration:none;transition:color 120ms}
+.nav-link:hover{color:var(--k-white)}
+.nav-npm{display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,0.15);border:0.5px solid rgba(139,92,246,0.3);color:var(--k-accent-light);padding:6px 14px;border-radius:var(--k-r-md);font-family:var(--k-font-mono);font-size:12px;font-weight:500;text-decoration:none;transition:background 200ms}
+.nav-npm:hover{background:rgba(139,92,246,0.25)}
+
+/* misc */
+.divider{height:0.5px;background:var(--k-border);margin:0}
+.text-muted{color:var(--k-muted);font-family:var(--k-font-mono);font-size:13px}
+.fw-800{font-weight:800}
+.relative{position:relative}
+.w-full{width:100%}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">kova<span>.</span>ui</div>
+  <div class="nav-links">
+    <a href="#components" class="nav-link">Components</a>
+    <a href="#install" class="nav-link">Install</a>
+    <a href="https://www.npmjs.com/package/kova-ui" class="nav-npm" target="_blank">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M0 0v24h24V0H0zm19.2 19.2H4.8V4.8h14.4v14.4zM7.2 7.2h9.6v9.6h-2.4V9.6h-2.4v7.2H7.2V7.2z"/></svg>
+      npm
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-badge"><span class="hero-dot"></span> v0.1.0 — Preact · TypeScript</div>
+  <h1>kova ui</h1>
+  <p class="hero-sub">A dark-first component library with surgical precision. 17 components, 5.6 kB gzipped. Zero dependencies besides Preact.</p>
+  <div class="hero-cta">
+    <a href="#install" class="k-btn k-btn-solid k-btn-lg">Get started</a>
+    <a href="#components" class="k-btn k-btn-ghost k-btn-lg">View components</a>
+  </div>
+  <div class="hero-stat">
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">17</div>
+      <div class="hero-stat-label">Components</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">5.6kb</div>
+      <div class="hero-stat-label">Gzipped</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">0</div>
+      <div class="hero-stat-label">Dependencies</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">TS</div>
+      <div class="hero-stat-label">TypeScript</div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll to explore</span>
+    <div class="scroll-arrow">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- COMPONENT SHOWCASE -->
+<section class="section" id="components">
+  <div class="section-label">Components</div>
+  <h2 class="section-title">Everything you need</h2>
+  <p class="section-desc">Every component built from scratch for Preact. Dark mode first, accessible by default, zero-compromise design.</p>
+
+  <div class="demo-grid">
+    <!-- Buttons -->
+    <div class="demo-cell" style="grid-column:span 2">
+      <div class="demo-cell-title">Buttons — 5 variants, 5 sizes</div>
+      <div class="demo-row">
+        <button class="k-btn k-btn-solid k-btn-md">Solid</button>
+        <button class="k-btn k-btn-cyan k-btn-md">Cyan</button>
+        <button class="k-btn k-btn-ghost k-btn-md">Ghost</button>
+        <button class="k-btn k-btn-outline k-btn-md">Outline</button>
+        <button class="k-btn k-btn-danger k-btn-md">Danger</button>
+        <button class="k-btn k-btn-success k-btn-md">Success</button>
+      </div>
+      <div class="demo-row">
+        <button class="k-btn k-btn-solid k-btn-xs">XSmall</button>
+        <button class="k-btn k-btn-solid k-btn-sm">Small</button>
+        <button class="k-btn k-btn-solid k-btn-md">Medium</button>
+        <button class="k-btn k-btn-solid k-btn-lg">Large</button>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Badges</div>
+      <div class="demo-row">
+        <span class="k-badge k-badge-accent">New</span>
+        <span class="k-badge k-badge-cyan k-badge-dot">Active</span>
+        <span class="k-badge k-badge-success">Deployed</span>
+        <span class="k-badge k-badge-warning">Pending</span>
+        <span class="k-badge k-badge-danger">Critical</span>
+        <span class="k-badge k-badge-pink">Beta</span>
+        <span class="k-badge k-badge-default">Draft</span>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Input</div>
+      <div>
+        <label class="k-label">Email address</label>
+        <input class="k-input" type="email" placeholder="you@example.com" />
+        <span class="k-hint" style="display:block;margin-top:5px">We'll never share your email.</span>
+      </div>
+    </div>
+
+    <!-- Switch -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Switch</div>
+      <label class="k-switch-wrap" id="sw1">
+        <span class="k-switch">
+          <input type="checkbox" id="s1" onchange="this.closest('.k-switch').querySelector('.k-switch-thumb').style.transform=this.checked?'translateX(20px)':''" />
+          <span class="k-switch-track"></span>
+          <span class="k-switch-thumb"></span>
+        </span>
+        <span class="k-switch-label">Dark mode</span>
+      </label>
+      <label class="k-switch-wrap">
+        <span class="k-switch">
+          <input type="checkbox" checked id="s2" />
+          <span class="k-switch-track" style="background:var(--k-accent);border-color:var(--k-accent);box-shadow:0 0 12px var(--k-accent-glow)"></span>
+          <span class="k-switch-thumb" style="transform:translateX(20px);background:#fff"></span>
+        </span>
+        <span class="k-switch-label">Notifications</span>
+      </label>
+    </div>
+
+    <!-- Card -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Card</div>
+      <div class="k-card" style="padding:1.25rem">
+        <div class="k-card-title">Deployment #427</div>
+        <div class="k-card-subtitle">Pushed 2 minutes ago</div>
+        <div class="k-card-body">Production build completed in 43s. All tests passed.</div>
+        <div style="margin-top:1rem;display:flex;gap:8px">
+          <span class="k-badge k-badge-success k-badge-dot">Live</span>
+          <span class="k-badge k-badge-default">v2.4.1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avatars -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Avatars</div>
+      <div class="demo-row">
+        <span class="k-avatar k-avatar-md" style="background:rgba(139,92,246,0.2);color:var(--k-accent)">RN</span>
+        <span class="k-avatar k-avatar-md" style="background:rgba(34,211,238,0.2);color:var(--k-cyan)">AC</span>
+        <span class="k-avatar k-avatar-md" style="background:rgba(74,222,128,0.2);color:var(--k-green)">BK</span>
+        <span class="k-avatar k-avatar-lg" style="background:rgba(244,114,182,0.2);color:var(--k-pink)">DL</span>
+      </div>
+      <div class="k-avatar-group" style="margin-top:8px">
+        <span class="k-avatar k-avatar-sm" style="background:rgba(139,92,246,0.2);color:var(--k-accent)">RN</span>
+        <span class="k-avatar k-avatar-sm" style="background:rgba(34,211,238,0.2);color:var(--k-cyan)">AC</span>
+        <span class="k-avatar k-avatar-sm" style="background:rgba(74,222,128,0.2);color:var(--k-green)">BK</span>
+        <span class="k-avatar k-avatar-sm" style="background:var(--k-surface-3);color:var(--k-muted)">+4</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Tabs</div>
+      <div class="k-tab-list" id="tabs">
+        <button class="k-tab k-tab-active" data-tab="0">Overview</button>
+        <button class="k-tab" data-tab="1">Settings</button>
+        <button class="k-tab" data-tab="2">Logs</button>
+      </div>
+      <div id="tab-content" style="font-family:var(--k-font-mono);font-size:13px;color:var(--k-muted);margin-top:12px">
+        Overview content — metrics, charts, summary data.
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Breadcrumb</div>
+      <nav class="k-breadcrumb">
+        <span><a href="#" class="k-bc-link">Home</a></span>
+        <span class="k-bc-sep">/</span>
+        <span><a href="#" class="k-bc-link">Projects</a></span>
+        <span class="k-bc-sep">/</span>
+        <span class="k-bc-current">kova-ui</span>
+      </nav>
+      <nav class="k-breadcrumb" style="margin-top:10px">
+        <span><a href="#" class="k-bc-link">Dashboard</a></span>
+        <span class="k-bc-sep">›</span>
+        <span><a href="#" class="k-bc-link">Settings</a></span>
+        <span class="k-bc-sep">›</span>
+        <span class="k-bc-current">Security</span>
+      </nav>
+    </div>
+
+    <!-- Table -->
+    <div class="demo-cell" style="grid-column:span 2">
+      <div class="demo-cell-title">Table — sortable, hover rows</div>
+      <div class="k-table-wrap">
+        <table class="k-table">
+          <thead><tr>
+            <th>Component</th>
+            <th>Status</th>
+            <th>Bundle</th>
+            <th>Version</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>Button</td><td><span class="k-badge k-badge-success k-badge-dot">Stable</span></td><td><code class="k-code">0.8kb</code></td><td>v1.2.0</td></tr>
+            <tr><td>Modal</td><td><span class="k-badge k-badge-success k-badge-dot">Stable</span></td><td><code class="k-code">1.1kb</code></td><td>v1.1.3</td></tr>
+            <tr><td>Toast</td><td><span class="k-badge k-badge-cyan k-badge-dot">Beta</span></td><td><code class="k-code">1.4kb</code></td><td>v0.9.1</td></tr>
+            <tr><td>Table</td><td><span class="k-badge k-badge-warning k-badge-dot">RC</span></td><td><code class="k-code">0.9kb</code></td><td>v0.8.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Progress</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-family:var(--k-font-mono);font-size:11px;color:var(--k-muted)"><span>CPU</span><span>72%</span></div>
+          <div class="k-progress k-progress-glow"><div class="k-progress-bar" style="width:72%"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-family:var(--k-font-mono);font-size:11px;color:var(--k-muted)"><span>Memory</span><span>45%</span></div>
+          <div class="k-progress"><div class="k-progress-bar" style="width:45%;background:var(--k-cyan)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-family:var(--k-font-mono);font-size:11px;color:var(--k-muted)"><span>Storage</span><span>91%</span></div>
+          <div class="k-progress"><div class="k-progress-bar" style="width:91%;background:var(--k-red)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeleton -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Skeleton</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <span class="k-skeleton" style="width:40px;height:40px;border-radius:50%"></span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+          <span class="k-skeleton" style="height:14px;width:60%"></span>
+          <span class="k-skeleton" style="height:12px;width:40%"></span>
+        </div>
+      </div>
+      <span class="k-skeleton" style="height:80px;margin-top:12px;border-radius:var(--k-r-lg)"></span>
+    </div>
+
+    <!-- Kbd / Code -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Kbd · Code</div>
+      <div class="text-muted" style="line-height:2">
+        Press <kbd class="k-kbd">⌘</kbd> + <kbd class="k-kbd">K</kbd> to open<br>
+        Run <code class="k-code">npm install kova-ui</code><br>
+        Use <code class="k-code">useToast()</code> for notifications
+      </div>
+    </div>
+
+    <!-- Tooltip demo -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Tooltip</div>
+      <div class="demo-row">
+        <span class="k-tooltip-wrap" id="tt1" onmouseenter="document.getElementById('tt-tip1').style.display='block'" onmouseleave="document.getElementById('tt-tip1').style.display='none'">
+          <button class="k-btn k-btn-ghost k-btn-sm">Hover me</button>
+          <span id="tt-tip1" class="k-tooltip" style="display:none">Tooltip content here</span>
+        </span>
+        <span class="k-tooltip-wrap" onmouseenter="document.getElementById('tt-tip2').style.display='block'" onmouseleave="document.getElementById('tt-tip2').style.display='none'">
+          <span class="k-badge k-badge-accent">Hover badge</span>
+          <span id="tt-tip2" class="k-tooltip" style="display:none">Badge tooltip</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Menu / Dropdown</div>
+      <div class="relative" style="display:inline-block">
+        <button class="k-btn k-btn-ghost k-btn-md" id="menu-trigger" onclick="toggleMenu()">
+          Options
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="k-menu" id="dropdown-menu" style="display:none">
+          <div class="k-menu-label-hd">Actions</div>
+          <button class="k-menu-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--k-muted)" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+          </button>
+          <button class="k-menu-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--k-muted)" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Duplicate
+          </button>
+          <div class="k-menu-sep"></div>
+          <button class="k-menu-item k-menu-item-danger">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="demo-cell" style="grid-column:span 2">
+      <div class="demo-cell-title">Accordion</div>
+      <div class="k-accordion" id="accordion">
+        <div class="k-acc-item">
+          <button class="k-acc-trigger" onclick="toggleAcc(0)">
+            What is kova-ui?
+            <svg class="k-acc-chevron" id="chev0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="k-acc-body" id="acc0" style="max-height:0">
+            <div class="k-acc-content">A dark-first, Preact component library crafted for modern web products. Every component is built with TypeScript, ships as an ES module, and is accessible by default.</div>
+          </div>
+        </div>
+        <div class="k-acc-item">
+          <button class="k-acc-trigger" onclick="toggleAcc(1)">
+            Is it tree-shakeable?
+            <svg class="k-acc-chevron" id="chev1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="k-acc-body" id="acc1" style="max-height:0">
+            <div class="k-acc-content">Yes — every component is individually importable. If you only use Button and Badge, only those two modules end up in your bundle.</div>
+          </div>
+        </div>
+        <div class="k-acc-item">
+          <button class="k-acc-trigger" onclick="toggleAcc(2)">
+            Can I use it with React?
+            <svg class="k-acc-chevron" id="chev2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="k-acc-body" id="acc2" style="max-height:0">
+            <div class="k-acc-content">Preact is fully API-compatible with React. Add <code class="k-code">alias: { react: 'preact/compat' }</code> to your bundler config and kova-ui works in any React project.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal trigger -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Modal</div>
+      <button class="k-btn k-btn-solid k-btn-md" onclick="document.getElementById('demo-modal').style.display='flex'">Open Modal</button>
+    </div>
+
+    <!-- Toast trigger -->
+    <div class="demo-cell">
+      <div class="demo-cell-title">Toast (useToast)</div>
+      <div class="demo-row">
+        <button class="k-btn k-btn-success k-btn-sm" onclick="showToast('success')">Success</button>
+        <button class="k-btn k-btn-danger k-btn-sm" onclick="showToast('error')">Error</button>
+        <button class="k-btn k-btn-ghost k-btn-sm" onclick="showToast('warning')">Warning</button>
+        <button class="k-btn k-btn-outline k-btn-sm" onclick="showToast('info')">Info</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section" style="padding-top:0">
+  <div class="divider"></div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" style="padding-top:3rem">
+  <div class="section-label">Why kova-ui</div>
+  <h2 class="section-title">Built differently</h2>
+  <p class="section-desc">Not just a component kit — an opinionated design system for products that take aesthetics seriously.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(139,92,246,0.15)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--k-accent)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <div class="feature-title">5.6kb gzipped</div>
+      <div class="feature-desc">Zero runtime overhead. No polyfills, no bloat. Built on Preact's 3kb core.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(34,211,238,0.12)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--k-cyan)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="feature-title">Accessible by default</div>
+      <div class="feature-desc">ARIA attributes, keyboard navigation, focus management — built in, not bolted on.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(74,222,128,0.1)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--k-green)" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+      </div>
+      <div class="feature-title">Tree-shakeable</div>
+      <div class="feature-desc">Import exactly what you use. <code class="k-code">import {'{ Button }'} from 'kova-ui'</code> and nothing else ships.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(251,191,36,0.1)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--k-amber)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feature-title">CSS custom properties</div>
+      <div class="feature-desc">Every visual token is a CSS variable. Theme the entire library in 5 lines.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(244,114,182,0.1)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--k-pink)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <div class="feature-title">React compatible</div>
+      <div class="feature-desc">One alias in your bundler. Use kova-ui in any React project with zero code changes.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(139,92,246,0.15)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--k-accent)" stroke-width="2" stroke-linecap="round"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 9H14V7.5"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8H3.5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M10 14.5"/></svg>
+      </div>
+      <div class="feature-title">TypeScript first</div>
+      <div class="feature-desc">Full type definitions bundled. IntelliSense, prop completion, and type safety out of the box.</div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section class="section" id="install">
+  <div class="install-box">
+    <div class="section-label" style="text-align:center">Quick start</div>
+    <h2 class="section-title" style="text-align:center">One command</h2>
+    <div class="relative" style="display:inline-block">
+      <div class="install-cmd" id="copy-cmd" onclick="copyInstall()">
+        <span>$</span> npm install kova-ui
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--k-muted)" stroke-width="2" stroke-linecap="round" id="copy-icon"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <span class="copy-badge" id="copy-badge">Copied!</span>
+      </div>
+    </div>
+    <div style="font-family:var(--k-font-mono);font-size:13px;color:var(--k-muted);margin-bottom:2rem;line-height:2;position:relative;z-index:1">
+      Then import once at your app root:<br>
+      <code class="k-code">import 'kova-ui/styles'</code>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1">
+      <a href="https://www.npmjs.com/package/kova-ui" target="_blank" class="k-btn k-btn-solid k-btn-lg">View on npm</a>
+      <a href="#components" class="k-btn k-btn-ghost k-btn-lg">Explore components</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>kova-ui — MIT License — Built with Preact + TypeScript</span>
+  <span style="margin:0 1rem;color:var(--k-border)">|</span>
+  <a href="https://www.npmjs.com/package/kova-ui" target="_blank">npm</a>
+  <span style="margin:0 0.5rem;color:var(--k-border)">·</span>
+  <a href="https://github.com/YOUR_USERNAME/kova-ui" target="_blank">GitHub</a>
+</footer>
+
+<!-- MODAL -->
+<div class="k-modal-overlay" id="demo-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="k-modal-box">
+    <div class="k-modal-header">
+      <h2 class="k-modal-title">Confirm action</h2>
+      <button class="k-modal-close" onclick="document.getElementById('demo-modal').style.display='none'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="k-modal-body">
+      This is a <strong style="color:var(--k-white)">kova-ui Modal</strong>. It supports four sizes, keyboard dismissal with <kbd class="k-kbd">Esc</kbd>, overlay click to close, body scroll lock, and portal rendering via <code class="k-code">createPortal</code>.
+    </div>
+    <div class="k-modal-footer">
+      <button class="k-btn k-btn-ghost k-btn-md" onclick="document.getElementById('demo-modal').style.display='none'">Cancel</button>
+      <button class="k-btn k-btn-solid k-btn-md" onclick="document.getElementById('demo-modal').style.display='none'">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="k-toast-container" id="toast-container"></div>
+
+<script>
+// Tabs
+const tabContents = ['Overview content — metrics, charts, summary data.','Settings — configure your workspace and preferences.','Logs — real-time build output and deployment history.']
+document.getElementById('tabs').addEventListener('click', e => {
+  const btn = e.target.closest('.k-tab')
+  if (!btn) return
+  document.querySelectorAll('#tabs .k-tab').forEach(t => t.classList.remove('k-tab-active'))
+  btn.classList.add('k-tab-active')
+  document.getElementById('tab-content').textContent = tabContents[btn.dataset.tab]
+})
+
+// Menu
+function toggleMenu() {
+  const m = document.getElementById('dropdown-menu')
+  m.style.display = m.style.display === 'none' ? 'block' : 'none'
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#menu-trigger') && !e.target.closest('#dropdown-menu')) {
+    const m = document.getElementById('dropdown-menu')
+    if (m) m.style.display = 'none'
+  }
+})
+
+// Accordion
+const accData = [{h:0},{h:0},{h:0}]
+function toggleAcc(i) {
+  accData[i].open = !accData[i].open
+  const body = document.getElementById('acc'+i)
+  const chev = document.getElementById('chev'+i)
+  body.style.maxHeight = accData[i].open ? body.scrollHeight + 'px' : '0'
+  chev.style.transform = accData[i].open ? 'rotate(180deg)' : ''
+}
+
+// Switch
+document.querySelectorAll('.k-switch input').forEach(inp => {
+  inp.addEventListener('change', function() {
+    const track = this.parentElement.querySelector('.k-switch-track')
+    const thumb = this.parentElement.querySelector('.k-switch-thumb')
+    if (this.checked) {
+      track.style.cssText = 'background:var(--k-accent);border-color:var(--k-accent);box-shadow:0 0 12px var(--k-accent-glow)'
+      thumb.style.transform = 'translateX(20px)'
+      thumb.style.background = '#fff'
+    } else {
+      track.style.cssText = ''
+      thumb.style.transform = ''
+      thumb.style.background = ''
+    }
+  })
+})
+
+// Toast
+let toastId = 0
+const toastConfig = {
+  success: { title: 'Deployed successfully', msg: 'Your app is live on production.', dur: 3000 },
+  error:   { title: 'Build failed', msg: 'Check your logs for details.', dur: 5000 },
+  warning: { title: 'Slow response detected', msg: 'P95 latency > 800ms.', dur: 4000 },
+  info:    { title: 'Update available', msg: 'kova-ui v0.2.0 is ready.', dur: 3500 }
+}
+const toastIcons = {
+  success: '<path d="M20 6L9 17l-5-5"/>',
+  error: '<path d="M18 6L6 18M6 6l12 12"/>',
+  warning: '<path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>',
+  info: '<path d="M12 16v-4m0-4h.01M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>'
+}
+function showToast(type) {
+  const id = 'toast-' + (++toastId)
+  const { title, msg, dur } = toastConfig[type]
+  const container = document.getElementById('toast-container')
+  const el = document.createElement('div')
+  el.id = id
+  el.className = `k-toast k-toast-${type}`
+  el.innerHTML = `
+    <svg class="k-toast-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${toastIcons[type]}</svg>
+    <div style="flex:1"><div class="k-toast-title">${title}</div><div class="k-toast-msg">${msg}</div></div>
+    <button class="k-toast-close-btn" onclick="removeToast('${id}')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="k-toast-bar" style="--dur:${dur}ms"></div>
+  `
+  container.appendChild(el)
+  setTimeout(() => removeToast(id), dur)
+}
+function removeToast(id) {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.classList.add('k-toast-exit')
+  setTimeout(() => el.remove(), 300)
+}
+
+// Copy install
+function copyInstall() {
+  navigator.clipboard?.writeText('npm install kova-ui').catch(() => {})
+  const badge = document.getElementById('copy-badge')
+  badge.classList.add('show')
+  setTimeout(() => badge.classList.remove('show'), 1800)
+}
+
+// Keyboard close modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('demo-modal').style.display = 'none'
+})
+</script>
+</body>
+</html>

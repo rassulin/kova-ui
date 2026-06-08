@@ -1,0 +1,140 @@
+@use '../tokens' as t;
+
+// ─── KovaTheme wrapper ────────────────────────────────────────────────────────
+
+.k-theme {
+  display: block;
+  font-family: var(--k-font-display);
+  color: var(--k-text);
+
+  // Smooth surface/color transitions when theme flips
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+  }
+
+  // ── Scrollbar — styled ─────────────────────────────────────────────────────
+  &--scrollbar-styled {
+    // Firefox
+    scrollbar-width: thin;
+    scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+
+    // Chromium / Safari / Edge
+    *::-webkit-scrollbar       { width: 8px; height: 8px; }
+    *::-webkit-scrollbar-track { background: transparent; }
+    *::-webkit-scrollbar-corner { background: transparent; }
+
+    *::-webkit-scrollbar-thumb {
+      // Transparent border = padding around a narrower visible thumb
+      background: rgba(128, 128, 128, 0.25);
+      border-radius: 99px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+      transition: background 180ms ease, border-width 180ms ease;
+
+      &:hover  {
+        background: rgba(128, 128, 128, 0.45);
+        background-clip: content-box;
+        border-width: 1.5px;
+      }
+
+      &:active {
+        background: var(--k-accent);
+        background-clip: content-box;
+        border-width: 1.5px;
+      }
+    }
+  }
+
+  // ── Scrollbar — hidden ─────────────────────────────────────────────────────
+  &--scrollbar-hidden {
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar { display: none; }
+    }
+  }
+
+  // ── Density — compact ─────────────────────────────────────────────────────
+  &--density-compact {
+    .k-btn-xs { height: 24px; padding: 0 10px; font-size: 10px; }
+    .k-btn-sm { height: 29px; padding: 0 14px; font-size: 11px; }
+    .k-btn-md { height: 34px; padding: 0 17px; font-size: 12px; }
+    .k-btn-lg { height: 41px; padding: 0 24px; font-size: 13px; }
+    .k-btn-xl { height: 48px; padding: 0 30px; font-size: 14px; }
+
+    .k-input { height: 34px; font-size: 12px; }
+    .k-input-sm { height: 28px; }
+    .k-input-lg { height: 41px; }
+    .k-select { height: 34px; font-size: 12px; }
+
+    .k-table thead th { padding: 6px 12px; }
+    .k-table tbody td { padding: 8px 12px; }
+    .k-table-pagination { padding: 6px 12px; }
+
+    .k-card { padding: 1rem; }
+    .k-accordion-trigger { padding: 11px 16px; font-size: 13px; }
+    .k-accordion-content { padding: 2px 16px 14px; font-size: 12px; }
+
+    .k-modal-header { padding: 1.25rem 1.25rem 0; }
+    .k-modal-body   { padding: 0.75rem 1.25rem 1.25rem; }
+    .k-modal-footer { padding: 0 1.25rem 1.25rem; }
+  }
+
+  // ── Density — comfortable ──────────────────────────────────────────────────
+  &--density-comfortable {
+    .k-btn-xs { height: 32px; padding: 0 14px; }
+    .k-btn-sm { height: 39px; padding: 0 18px; }
+    .k-btn-md { height: 46px; padding: 0 23px; }
+    .k-btn-lg { height: 55px; padding: 0 32px; font-size: 15px; }
+    .k-btn-xl { height: 64px; padding: 0 42px; font-size: 16px; }
+
+    .k-input    { height: 46px; font-size: 14px; }
+    .k-input-sm { height: 39px; }
+    .k-input-lg { height: 55px; }
+    .k-select   { height: 46px; font-size: 14px; }
+
+    .k-table thead th { padding: 14px 20px; }
+    .k-table tbody td { padding: 16px 20px; }
+
+    .k-card { padding: 2rem; }
+    .k-accordion-trigger { padding: 20px 24px; font-size: 15px; }
+    .k-accordion-content { padding: 6px 24px 24px; }
+
+    .k-modal-header { padding: 2rem 2rem 0; }
+    .k-modal-body   { padding: 1.25rem 2rem 2rem; }
+    .k-modal-footer { padding: 0 2rem 2rem; }
+  }
+}
+
+// ─── ThemeToggle ──────────────────────────────────────────────────────────────
+
+.k-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--k-r-md);
+  border: 0.5px solid var(--k-border);
+  background: var(--k-surface-2);
+  color: var(--k-text-muted);
+  cursor: pointer;
+  transition: background t.$dur-fast, color t.$dur-fast, border-color t.$dur-fast;
+
+  &:hover {
+    background: var(--k-surface-3);
+    color: var(--k-text);
+    border-color: var(--k-border-hover);
+  }
+
+  svg { flex-shrink: 0; }
+
+  &-label {
+    font-family: t.$font-display;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+}

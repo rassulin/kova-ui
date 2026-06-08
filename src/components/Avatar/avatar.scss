@@ -1,0 +1,17 @@
+@use '../../tokens' as t;
+
+$avatar-sizes: ('xs': (24px,9px), 'sm': (32px,11px), 'md': (40px,14px), 'lg': (56px,18px), 'xl': (72px,24px));
+
+.k-avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-family: t.$font-display; font-weight: 700;
+  overflow: hidden; flex-shrink: 0; border: 1.5px solid t.$border; letter-spacing: 0.02em;
+  @each $name, $vals in $avatar-sizes {
+    &-#{$name} { width: nth($vals,1); height: nth($vals,1); font-size: nth($vals,2); }
+  }
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+.k-avatar-group {
+  display: flex;
+  .k-avatar { margin-left: -8px; box-shadow: 0 0 0 2px var(--k-surface-1); &:first-child { margin-left: 0; } }
+}
