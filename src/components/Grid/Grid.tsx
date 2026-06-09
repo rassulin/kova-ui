@@ -1,5 +1,5 @@
 import './grid.scss';
-import { h, ComponentChildren } from 'preact';
+import { ComponentChildren, h } from 'preact';
 
 /* ── Progress ─────────────────────────────────────────────────── */
 export interface ProgressProps {

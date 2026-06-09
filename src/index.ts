@@ -80,6 +80,19 @@ export type {
   ThemeToggleProps,
 } from './theme/index';
 
+// Checkbox
+export { Checkbox, CheckboxGroup } from './components/Checkbox/Checkbox';
+export type {
+  CheckboxProps,
+  CheckboxGroupProps,
+  CheckboxGroupOption,
+  CheckboxSize,
+} from './components/Checkbox/Checkbox';
+
+// Icon
+export { Icon, SpriteSheet } from './components/Icon/Icon';
+export type { IconProps, IconName, IconSize } from './components/Icon/Icon';
+
 // DatePicker
 export { DatePicker } from './components/DatePicker/DatePicker';
 export type { DatePickerProps } from './components/DatePicker/DatePicker';
@@ -110,16 +123,3 @@ export type {
   DividerLabelProps,
   HeadingProps,
 } from './components/Typography/Typography';
-
-// Checkbox
-export { Checkbox, CheckboxGroup } from './components/Checkbox/Checkbox';
-export type {
-  CheckboxProps,
-  CheckboxGroupProps,
-  CheckboxGroupOption,
-  CheckboxSize,
-} from './components/Checkbox/Checkbox';
-
-// Icon
-export { Icon, SpriteSheet } from './components/Icon/Icon';
-export type { IconName, IconSize, IconProps } from './components/Icon/Icon';

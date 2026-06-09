@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 /**
  * Debounces a value — only updates after `delay` ms of inactivity.

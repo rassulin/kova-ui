@@ -4,7 +4,6 @@ import { Button } from '../components/Button/Button';
 import { Badge } from '../components/Badge/Badge';
 import { Card } from '../components/Card/Card';
 import { Avatar, AvatarGroup } from '../components/Avatar/Avatar';
-import { Progress } from '../components/Grid/Grid';
 import { Spinner } from '../components/Spinner/Spinner';
 
 const meta: Meta = {

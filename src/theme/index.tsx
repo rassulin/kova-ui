@@ -12,13 +12,13 @@ export type ScrollbarStyle = 'styled' | 'hidden' | 'auto';
 export interface KovaThemeProps {
   /** 'dark' | 'light' | 'system' (follows OS). @default 'system' */
   theme?: Theme;
-  /** localStorage key for persistence. false = disabled. @default 'kova-theme' */
+  /** localStorage key. false = disabled. @default 'kova-theme' */
   storageKey?: string | false;
   /** Border-radius scale. @default 'default' */
   radius?: RadiusScale;
-  /** Spacing / height density. @default 'default' */
+  /** Spacing/height density. @default 'default' */
   density?: Density;
-  /** Override accent colour — any valid CSS colour string */
+  /** Override accent — any CSS colour string */
   accent?: string;
   /** Scrollbar appearance. @default 'styled' */
   scrollbar?: ScrollbarStyle;
@@ -26,13 +26,16 @@ export interface KovaThemeProps {
   tokens?: Record<string, string>;
   as?: 'div' | 'main' | 'section' | 'article' | 'aside';
   class?: string;
+  style?: string | Record<string, string | number>;
   children?: ComponentChildren;
 }
+
+// Keep old name as alias
+export type KovaProviderProps = KovaThemeProps;
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
 interface ThemeContextValue {
-  /** Resolved: always 'dark' or 'light' */
   theme: 'dark' | 'light';
   setting: Theme;
   setTheme: (t: Theme) => void;
@@ -63,17 +66,20 @@ function storageGet(key: string): Theme | null {
   try {
     const v = localStorage.getItem(key);
     if (v === 'dark' || v === 'light' || v === 'system') return v;
-  } catch {}
+  } catch {
+    // localStorage unavailable (SSR, private mode)
+  }
   return null;
 }
 
 function storageSet(key: string, v: Theme) {
   try {
     localStorage.setItem(key, v);
-  } catch {}
+  } catch {
+    // localStorage unavailable (SSR, private mode)
+  }
 }
 
-/** Parse any CSS colour → derive accent token set via canvas */
 function deriveAccent(colour: string): Record<string, string> {
   if (typeof document === 'undefined') return {};
   try {
@@ -99,7 +105,7 @@ function deriveAccent(colour: string): Record<string, string> {
   }
 }
 
-// All radius variants always set every token so switching back to default works
+// Always write every radius token so switching back to default restores values
 const RADIUS: Record<RadiusScale, Record<string, string>> = {
   sharp: { '--k-r-sm': '3px', '--k-r-md': '5px', '--k-r-lg': '8px', '--k-r-xl': '12px', '--k-r-pill': '9999px' },
   default: { '--k-r-sm': '6px', '--k-r-md': '10px', '--k-r-lg': '16px', '--k-r-xl': '24px', '--k-r-pill': '9999px' },
@@ -118,12 +124,12 @@ export function KovaTheme({
   tokens = {},
   as: Tag = 'div',
   class: className = '',
+  style,
   children,
 }: KovaThemeProps) {
-  // biome-ignore lint/suspicious/noExplicitAny: dynamic tag ref
   const ref = useRef<any>(null);
 
-  // ── Theme state ────────────────────────────────────────────────────────────
+  // ── Theme state ────────────────────────────────────────────────────────
   const [setting, setSetting] = useState<Theme>(() => {
     if (storageKey) {
       const s = storageGet(storageKey);
@@ -135,7 +141,6 @@ export function KovaTheme({
 
   const resolved: 'dark' | 'light' = setting === 'system' ? osTheme : setting;
 
-  // Track OS preference changes when in system mode
   useEffect(() => {
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
     const fn = (e: MediaQueryListEvent) => setOsTheme(e.matches ? 'dark' : 'light');
@@ -155,29 +160,30 @@ export function KovaTheme({
     setTheme(resolved === 'dark' ? 'light' : 'dark');
   }, [resolved, setTheme]);
 
-  // ── Compute all CSS vars to apply ─────────────────────────────────────────
+  // ── Build CSS vars ─────────────────────────────────────────────────────
   const cssVars = useMemo(() => {
     const vars: Record<string, string> = {};
-    // Radius — always write all 5 tokens so switching scales works
     Object.assign(vars, RADIUS[radius]);
-    // Accent derivation
     if (accent) Object.assign(vars, deriveAccent(accent));
-    // Explicit overrides win last
     Object.assign(vars, tokens);
     return vars;
   }, [radius, accent, tokens]);
 
-  // ── Write data-theme + CSS vars directly to the DOM element ───────────────
-  // We use ref + setProperty — NOT the style prop — because:
-  // 1. CSS custom properties (--k-*) are silently dropped by Preact's style typings
-  // 2. setProperty is the only guaranteed way to set custom properties via JS
+  const prevVarsRef = useRef<Record<string, string>>({});
+
+  // ── Apply to DOM via ref — CSS custom properties need setProperty ──────
   useEffect(() => {
     const el = ref.current as HTMLElement | null;
     if (!el) return;
     el.setAttribute('data-theme', resolved);
+    // Remove stale vars no longer in current set (e.g. accent removed)
+    for (const k of Object.keys(prevVarsRef.current)) {
+      if (!(k in cssVars)) el.style.removeProperty(k);
+    }
     for (const [k, v] of Object.entries(cssVars)) {
       el.style.setProperty(k, v);
     }
+    prevVarsRef.current = cssVars;
   }, [resolved, cssVars]);
 
   const T = Tag as 'div';
@@ -197,12 +203,16 @@ export function KovaTheme({
           .filter(Boolean)
           .join(' ')}
         data-theme={resolved}
+        style={style}
       >
         {children}
       </T>
     </ThemeContext.Provider>
   );
 }
+
+// Backward-compat alias
+export const KovaProvider = KovaTheme;
 
 // ─── useTheme ─────────────────────────────────────────────────────────────────
 
@@ -239,7 +249,6 @@ export function ThemeToggle({ showLabel = false, class: className = '' }: ThemeT
 
 function SunIcon() {
   return (
-    // biome-ignore lint/a11y/noSvgWithoutTitle: decorative, parent has aria-label
     <svg
       aria-hidden="true"
       width="16"
@@ -266,7 +275,6 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    // biome-ignore lint/a11y/noSvgWithoutTitle: decorative, parent has aria-label
     <svg
       aria-hidden="true"
       width="16"
@@ -282,7 +290,3 @@ function MoonIcon() {
     </svg>
   );
 }
-
-// Keep KovaProvider as alias so existing imports don't break
-export { KovaTheme as KovaProvider };
-export type { KovaThemeProps as KovaProviderProps };

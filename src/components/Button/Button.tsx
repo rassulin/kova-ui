@@ -32,7 +32,6 @@ export interface ButtonProps {
   href?: string;
   class?: string;
   children?: ComponentChildren;
-  // biome-ignore lint/suspicious/noExplicitAny: rest props spread to element
   [key: string]: any;
 }
 

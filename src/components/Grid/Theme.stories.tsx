@@ -1,40 +1,56 @@
 import type { Meta, StoryObj } from '@storybook/preact';
 import { h } from 'preact';
-import { useState } from 'preact/hooks';
-import { KovaTheme, ThemeToggle, useTheme } from '../../theme/index';
+import { KovaProvider, KovaTheme, ThemeToggle, useTheme } from '../../theme/index';
 import { Button } from '../Button/Button';
 import { Badge } from '../Badge/Badge';
 import { Card } from '../Card/Card';
 import { Input } from '../Input/Input';
 import { Switch } from '../Switch/Switch';
-import { SpriteSheet } from '../Icon/Icon';
+import { useState } from 'preact/hooks';
 
 const meta = {
-  title: 'Components/KovaTheme',
+  title: 'Components/Theme',
   tags: ['autodocs'],
-  decorators: [
-    (Story: () => h.JSX.Element) => (
-      <>
-        <SpriteSheet />
-        <Story />
-      </>
-    ),
-  ],
   parameters: {
     layout: 'padded',
     docs: {
       description: {
         component: `
-**KovaTheme** is the design system root. Wrap your app once.
+**KovaTheme** (alias: \`KovaProvider\`) wraps your app and exposes theme, radius, density, accent and scrollbar controls via CSS custom properties.
+**ThemeToggle** is a drop-in button that calls \`useTheme().toggle()\`.
 
 \`\`\`tsx
-import { KovaTheme, ThemeToggle } from 'kova-ui'
+import { KovaTheme, ThemeToggle, useTheme } from 'kova-ui'
 
-<KovaTheme theme="system" radius="default" scrollbar="styled">
-  <ThemeToggle />
-  <App />
-</KovaTheme>
+function App() {
+  return (
+    <KovaTheme theme="dark" radius="default" density="default" scrollbar="styled">
+      <ThemeToggle />
+      {/* rest of your app */}
+    </KovaTheme>
+  )
+}
 \`\`\`
+
+### Manual control
+
+\`\`\`tsx
+const { theme, setTheme, toggle } = useTheme()
+
+<button onClick={() => setTheme('light')}>Go light</button>
+<button onClick={toggle}>Toggle</button>
+\`\`\`
+
+### How it works
+
+All surface/border/text colors are CSS custom properties that flip when \`data-theme="light"\` is set on \`<html>\`:
+
+\`\`\`scss
+:root, [data-theme="dark"]  { --k-surface-1: #111114; --k-text: #f5f5f7; }
+[data-theme="light"]         { --k-surface-1: #ffffff; --k-text: #0f0f14; }
+\`\`\`
+
+Accent colors (violet, cyan, green…) stay the same in both themes.
         `,
       },
     },
@@ -44,132 +60,115 @@ import { KovaTheme, ThemeToggle } from 'kova-ui'
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function Showcase({ label }: { label?: string }) {
+function Showcase() {
   const { theme } = useTheme();
   const [sw, setSw] = useState(true);
+
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '14px',
-        padding: '1.5rem',
         background: 'var(--k-bg)',
+        padding: '2rem',
         borderRadius: 'var(--k-r-xl)',
         border: '0.5px solid var(--k-border)',
-        transition: 'all 200ms',
+        minWidth: '360px',
+        transition: 'background 300ms, border-color 300ms',
       }}
     >
-      {label && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span
-            style={{
-              fontFamily: 'var(--k-font-mono)',
-              fontSize: '11px',
-              color: 'var(--k-text-subtle)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-            }}
-          >
-            {label}
-          </span>
-          <Badge variant="default">{theme}</Badge>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <span
+          style={{ fontFamily: 'var(--k-font-display)', fontWeight: 700, color: 'var(--k-text)', fontSize: '15px' }}
+        >
+          Theme: <Badge variant="accent">{theme}</Badge>
+        </span>
+        <ThemeToggle />
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <Button variant="solid" size="sm">
+            Solid
+          </Button>
+          <Button variant="ghost" size="sm">
+            Ghost
+          </Button>
+          <Button variant="outline" size="sm">
+            Outline
+          </Button>
+          <Button variant="danger" size="sm">
+            Danger
+          </Button>
         </div>
-      )}
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        <Button variant="solid" size="sm" icon="zap">
-          Deploy
-        </Button>
-        <Button variant="ghost" size="sm" icon="settings">
-          Settings
-        </Button>
-        <Button variant="danger" size="sm" icon="trash" iconOnly label="Delete" />
+
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          <Badge variant="accent">Accent</Badge>
+          <Badge variant="success" dot>
+            Active
+          </Badge>
+          <Badge variant="warning">Pending</Badge>
+          <Badge variant="cyan">Beta</Badge>
+        </div>
+
+        <Input placeholder="Type something…" />
+        <Switch checked={sw} onChange={setSw} label="Enable notifications" />
+
+        <Card title="Card component" subtitle="Adapts to both themes">
+          Surface colors, borders, and text all flip automatically.
+        </Card>
       </div>
-      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-        <Badge variant="accent">New</Badge>
-        <Badge variant="success" dot>
-          Live
-        </Badge>
-        <Badge variant="warning">Pending</Badge>
-      </div>
-      <Input placeholder="Type something…" />
-      <Switch checked={sw} onChange={setSw} label="Enable notifications" />
-      <Card title="Card component" subtitle="Theme-aware surfaces">
-        All tokens resolve from the nearest KovaTheme boundary.
-      </Card>
     </div>
   );
 }
 
-export const SystemTheme: Story = {
-  name: 'System (follows OS)',
+export const Default: Story = {
+  name: 'Theme Toggle Demo',
   render: () => (
-    <KovaTheme theme="system" storageKey={false}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <ThemeToggle showLabel />
-          <span style={{ fontFamily: 'var(--k-font-mono)', fontSize: '12px', color: 'var(--k-text-muted)' }}>
-            Follows OS — click to override
-          </span>
-        </div>
-        <Showcase />
-      </div>
-    </KovaTheme>
+    <KovaProvider theme="dark" storageKey={false}>
+      <Showcase />
+    </KovaProvider>
   ),
 };
 
-export const DarkAndLight: Story = {
-  name: 'Dark & Light Side-by-Side',
-  parameters: { layout: 'fullscreen' },
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '100vh' }}>
-      <KovaTheme theme="dark" storageKey={false} style={{ padding: '2rem' } as Record<string, string>}>
-        <Showcase label="Dark" />
-      </KovaTheme>
-      <KovaTheme theme="light" storageKey={false} style={{ padding: '2rem' } as Record<string, string>}>
-        <Showcase label="Light" />
-      </KovaTheme>
-    </div>
-  ),
-};
+// ─── Radius ───────────────────────────────────────────────────────────────────
 
 export const RadiusScales: Story = {
-  name: 'Radius — Sharp / Default / Rounded',
+  name: 'Radius Scales',
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['sharp', 'default', 'rounded'] as const).map(r => (
-        <KovaTheme key={r} theme="dark" radius={r} storageKey={false}>
+    <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' as const }}>
+      {(['sharp', 'default', 'rounded'] as const).map(radius => (
+        <KovaTheme key={radius} theme="dark" storageKey={false} radius={radius} style={{ flex: 1, minWidth: '180px' }}>
           <div
             style={{
-              padding: '1.5rem',
-              background: 'var(--k-bg)',
+              padding: '20px',
+              background: 'var(--k-surface-1)',
               border: '0.5px solid var(--k-border)',
-              borderRadius: 'var(--k-r-xl)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
+              borderRadius: 'var(--k-r-lg)',
             }}
           >
-            <span
+            <div
               style={{
-                fontFamily: 'var(--k-font-mono)',
+                fontFamily: 'var(--k-font-display)',
+                fontWeight: 700,
                 fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const,
                 color: 'var(--k-text-subtle)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
+                marginBottom: '14px',
               }}
             >
-              radius="{r}"
-            </span>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-              <Button variant="solid">Button</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="outline" icon="search" iconOnly label="search" />
-              <Input placeholder="Input field" style={{ maxWidth: '200px' } as Record<string, string>} />
-              <Badge variant="accent">Badge</Badge>
-              <Badge variant="success" dot>
-                Live
-              </Badge>
+              radius="{radius}"
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '10px' }}>
+              <Button variant="solid" size="sm">
+                Button
+              </Button>
+              <Input placeholder="Input field" />
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <Badge variant="accent">New</Badge>
+                <Badge variant="success" dot>
+                  Live
+                </Badge>
+              </div>
             </div>
           </div>
         </KovaTheme>
@@ -178,210 +177,183 @@ export const RadiusScales: Story = {
   ),
 };
 
-export const AccentColours: Story = {
-  name: 'Custom Accent Colours',
-  render: () => {
-    const accents = [
-      { colour: '#8b5cf6', label: 'Violet (default)' },
-      { colour: '#06b6d4', label: 'Cyan' },
-      { colour: '#e11d48', label: 'Rose' },
-      { colour: '#f97316', label: 'Orange' },
-      { colour: '#10b981', label: 'Emerald' },
-      { colour: '#f59e0b', label: 'Amber' },
-    ];
-    return (
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: '16px' }}>
-        {accents.map(({ colour, label }) => (
-          <KovaTheme key={colour} theme="dark" accent={colour} storageKey={false}>
+// ─── Density ──────────────────────────────────────────────────────────────────
+
+export const DensityScales: Story = {
+  name: 'Density Scales',
+  render: () => (
+    <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' as const }}>
+      {(['compact', 'default', 'comfortable'] as const).map(density => (
+        <KovaTheme
+          key={density}
+          theme="dark"
+          storageKey={false}
+          density={density}
+          style={{ flex: 1, minWidth: '200px' }}
+        >
+          <div
+            style={{
+              padding: '20px',
+              background: 'var(--k-surface-1)',
+              border: '0.5px solid var(--k-border)',
+              borderRadius: 'var(--k-r-lg)',
+            }}
+          >
             <div
               style={{
-                padding: '1.25rem',
-                background: 'var(--k-bg)',
-                border: '0.5px solid var(--k-border)',
-                borderRadius: 'var(--k-r-lg)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
+                fontFamily: 'var(--k-font-display)',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const,
+                color: 'var(--k-text-subtle)',
+                marginBottom: '14px',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span
-                  style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '50%',
-                    background: colour,
-                    flexShrink: '0' as unknown as number,
-                  }}
-                />
-                <span style={{ fontFamily: 'var(--k-font-mono)', fontSize: '11px', color: 'var(--k-text-muted)' }}>
-                  {label}
-                </span>
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                <Button variant="solid" size="sm">
-                  Primary
-                </Button>
-                <Button variant="outline" size="sm">
-                  Outline
-                </Button>
-              </div>
-              <div style={{ display: 'flex', gap: '6px' }}>
-                <Badge variant="accent">Accent</Badge>
-                <Badge variant="success" dot>
-                  Status
-                </Badge>
-              </div>
-              <Input placeholder="Focused input…" />
+              density="{density}"
             </div>
-          </KovaTheme>
-        ))}
-      </div>
-    );
-  },
-};
-
-export const LivePlayground: Story = {
-  name: 'Live Playground',
-  render: () => {
-    function Demo() {
-      const [theme, setTheme] = useState<'dark' | 'light' | 'system'>('dark');
-      const [radius, setRadius] = useState<'sharp' | 'default' | 'rounded'>('default');
-      const [density, setDensity] = useState<'compact' | 'default' | 'comfortable'>('default');
-      const [accent, setAccent] = useState('#8b5cf6');
-
-      const sel = (fn: (v: string) => void) => (e: Event) => fn((e.target as HTMLSelectElement).value);
-
-      const ctrlStyle: Record<string, string> = {
-        display: 'flex',
-        gap: '12px',
-        flexWrap: 'wrap',
-        alignItems: 'flex-end',
-        padding: '1rem',
-        background: '#18181c',
-        borderRadius: '10px',
-        border: '0.5px solid rgba(255,255,255,0.07)',
-      };
-
-      const labelStyle: Record<string, string> = {
-        fontFamily: 'var(--k-font-display)',
-        fontSize: '10px',
-        fontWeight: '700',
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
-        color: '#8b8b99',
-        marginBottom: '5px',
-      };
-
-      const selectStyle: Record<string, string> = {
-        height: '34px',
-        padding: '0 12px',
-        background: '#222228',
-        border: '0.5px solid rgba(255,255,255,0.07)',
-        borderRadius: '6px',
-        color: '#f5f5f7',
-        fontFamily: 'monospace',
-        fontSize: '12px',
-        cursor: 'pointer',
-      };
-
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Controls */}
-          <div style={ctrlStyle}>
-            {(
-              [
-                ['Theme', theme, setTheme, ['dark', 'light', 'system']],
-                ['Radius', radius, setRadius, ['sharp', 'default', 'rounded']],
-                ['Density', density, setDensity, ['compact', 'default', 'comfortable']],
-              ] as const
-            ).map(([lbl, val, fn, opts]) => (
-              <div key={lbl}>
-                <div style={labelStyle}>{lbl}</div>
-                <select value={val as string} onChange={sel(fn as (v: string) => void)} style={selectStyle}>
-                  {opts.map(o => (
-                    <option key={o} value={o}>
-                      {o}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
-            <div>
-              <div style={labelStyle}>Accent</div>
-              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                <input
-                  type="color"
-                  value={accent}
-                  onInput={e => setAccent((e.target as HTMLInputElement).value)}
-                  style={{
-                    width: '34px',
-                    height: '34px',
-                    padding: '2px',
-                    background: '#222228',
-                    border: '0.5px solid rgba(255,255,255,0.07)',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                  }}
-                />
-                <span style={{ fontFamily: 'monospace', fontSize: '12px', color: '#8b8b99' }}>{accent}</span>
-              </div>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '10px' }}>
+              <Button variant="solid">Primary action</Button>
+              <Button variant="ghost">Secondary</Button>
+              <Input placeholder="Text input" />
             </div>
           </div>
+        </KovaTheme>
+      ))}
+    </div>
+  ),
+};
 
-          {/* Live preview */}
-          <KovaTheme theme={theme} radius={radius} density={density} accent={accent} storageKey={false}>
-            <Showcase />
-          </KovaTheme>
-        </div>
+// ─── Custom accent ─────────────────────────────────────────────────────────────
+
+export const CustomAccent: Story = {
+  name: 'Custom Accent Color',
+  render: () => {
+    function Demo() {
+      const accents = [
+        { label: 'Violet (default)', value: '#8b5cf6' },
+        { label: 'Cyan', value: '#22d3ee' },
+        { label: 'Emerald', value: '#10b981' },
+        { label: 'Rose', value: '#f43f5e' },
+        { label: 'Amber', value: '#f59e0b' },
+        { label: 'Sky', value: '#0ea5e9' },
+      ];
+      const [accent, setAccent] = useState('#8b5cf6');
+
+      return (
+        <KovaTheme theme="dark" storageKey={false} accent={accent}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column' as const,
+              gap: '20px',
+              padding: '24px',
+              background: 'var(--k-surface-1)',
+              borderRadius: 'var(--k-r-xl)',
+              border: '0.5px solid var(--k-border)',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontFamily: 'var(--k-font-display)',
+                  fontWeight: 700,
+                  fontSize: '11px',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase' as const,
+                  color: 'var(--k-text-subtle)',
+                  marginBottom: '10px',
+                }}
+              >
+                Pick accent
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' as const }}>
+                {accents.map(a => (
+                  <button
+                    key={a.value}
+                    type="button"
+                    onClick={() => setAccent(a.value)}
+                    style={{
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      background: a.value,
+                      border: accent === a.value ? '2px solid white' : '2px solid transparent',
+                      cursor: 'pointer',
+                      outline: 'none',
+                      flexShrink: 0,
+                    }}
+                    title={a.label}
+                  />
+                ))}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' as const }}>
+              <Button variant="solid" size="sm">
+                Primary
+              </Button>
+              <Button variant="outline" size="sm">
+                Outline
+              </Button>
+              <Badge variant="accent">Accent</Badge>
+            </div>
+            <Input placeholder="Focus me to see accent border…" />
+            <Switch checked label="Accent switch" />
+          </div>
+        </KovaTheme>
       );
     }
     return <Demo />;
   },
 };
 
+// ─── Scrollbar ────────────────────────────────────────────────────────────────
+
 export const ScrollbarStyles: Story = {
   name: 'Scrollbar Styles',
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
-      {(['styled', 'hidden', 'auto'] as const).map(s => (
-        <KovaTheme key={s} theme="dark" scrollbar={s} storageKey={false}>
-          <div
-            style={{
-              height: '180px',
-              overflow: 'auto',
-              background: 'var(--k-surface-1)',
-              border: '0.5px solid var(--k-border)',
-              borderRadius: 'var(--k-r-lg)',
-              padding: '1rem',
-            }}
-          >
+    <div style={{ display: 'flex', gap: '20px' }}>
+      {(['styled', 'hidden', 'auto'] as const).map(scrollbar => (
+        <KovaTheme key={scrollbar} theme="dark" storageKey={false} scrollbar={scrollbar} style={{ flex: 1 }}>
+          <div style={{ border: '0.5px solid var(--k-border)', borderRadius: 'var(--k-r-lg)', overflow: 'hidden' }}>
             <div
               style={{
-                fontFamily: 'var(--k-font-mono)',
-                fontSize: '10px',
+                padding: '10px 14px',
+                background: 'var(--k-surface-2)',
+                borderBottom: '0.5px solid var(--k-border)',
+                fontFamily: 'var(--k-font-display)',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase' as const,
                 color: 'var(--k-text-subtle)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                marginBottom: '8px',
               }}
             >
-              scrollbar="{s}"
+              scrollbar="{scrollbar}"
             </div>
-            {Array.from({ length: 14 }, (_, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: '6px 0',
-                  borderBottom: '0.5px solid var(--k-border)',
-                  fontFamily: 'var(--k-font-mono)',
-                  fontSize: '12px',
-                  color: 'var(--k-text-muted)',
-                }}
-              >
-                Row {i + 1}
-              </div>
-            ))}
+            <div
+              style={{
+                height: '160px',
+                overflowY: 'auto',
+                padding: '12px 14px',
+                display: 'flex',
+                flexDirection: 'column' as const,
+                gap: '8px',
+              }}
+            >
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    height: '28px',
+                    background: 'var(--k-surface-2)',
+                    borderRadius: 'var(--k-r-sm)',
+                    border: '0.5px solid var(--k-border)',
+                    flexShrink: 0,
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </KovaTheme>
       ))}
@@ -389,73 +361,123 @@ export const ScrollbarStyles: Story = {
   ),
 };
 
-export const NestedThemes: Story = {
-  name: 'Nested Boundaries',
+// ─── Token overrides ──────────────────────────────────────────────────────────
+
+export const TokenOverrides: Story = {
+  name: 'Raw Token Overrides',
   render: () => (
-    <KovaTheme theme="light" storageKey={false}>
-      <div
-        style={{
-          padding: '1.5rem',
-          background: 'var(--k-bg)',
-          borderRadius: 'var(--k-r-xl)',
-          border: '0.5px solid var(--k-border)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-        }}
+    <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' as const }}>
+      <KovaTheme
+        theme="dark"
+        storageKey={false}
+        tokens={{ '--k-surface-1': '#0a0a12', '--k-surface-2': '#0f0f1c', '--k-border': 'rgba(100,80,200,0.2)' }}
+        style={{ flex: 1, minWidth: '200px' }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span
-            style={{
-              fontFamily: 'var(--k-font-mono)',
-              fontSize: '11px',
-              color: 'var(--k-text-muted)',
-              textTransform: 'uppercase',
-            }}
-          >
-            Light shell
-          </span>
-          <ThemeToggle showLabel />
+        <Card title="Deep indigo" subtitle="tokens={{ '--k-surface-1': '#0a0a12', ... }}">
+          Surfaces shifted toward deep indigo via raw token override.
+        </Card>
+      </KovaTheme>
+      <KovaTheme
+        theme="dark"
+        storageKey={false}
+        tokens={{ '--k-font-display': "'JetBrains Mono', monospace", '--k-font-mono': "'JetBrains Mono', monospace" }}
+        style={{ flex: 1, minWidth: '200px' }}
+      >
+        <Card title="Custom font" subtitle="tokens={{ '--k-font-display': '...' }}">
+          Override any design token — fonts, shadows, spacing — without forking.
+        </Card>
+      </KovaTheme>
+    </div>
+  ),
+};
+
+export const SideBySide: Story = {
+  name: 'Dark & Light Side-by-Side',
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      {/* Dark panel */}
+      <div
+        data-theme="dark"
+        style={{ flex: 1, background: 'var(--k-bg)', padding: '2rem', transition: 'background 300ms' }}
+      >
+        <div
+          style={{
+            marginBottom: '1rem',
+            fontFamily: 'var(--k-font-display)',
+            fontWeight: 700,
+            color: 'var(--k-text-muted)',
+            fontSize: '11px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Dark
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <Button variant="solid" size="sm">
-            Action
-          </Button>
-          <Input placeholder="Search…" style={{ maxWidth: '200px' } as Record<string, string>} />
-        </div>
-        <KovaTheme theme="dark" radius="sharp" storageKey={false}>
-          <div
-            style={{
-              padding: '1.25rem',
-              background: 'var(--k-bg)',
-              border: '0.5px solid var(--k-border)',
-              borderRadius: 'var(--k-r-lg)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'var(--k-font-mono)',
-                fontSize: '10px',
-                color: 'var(--k-text-subtle)',
-                textTransform: 'uppercase',
-              }}
-            >
-              Dark nested · radius="sharp"
-            </span>
-            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-              <Button variant="ghost" size="sm" icon="home">
-                Dashboard
-              </Button>
-              <Button variant="solid" size="sm" icon="settings">
-                Settings
-              </Button>
-            </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Button variant="solid" size="sm">
+              Solid
+            </Button>
+            <Button variant="ghost" size="sm">
+              Ghost
+            </Button>
           </div>
-        </KovaTheme>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <Badge variant="accent">New</Badge>
+            <Badge variant="success" dot>
+              Live
+            </Badge>
+          </div>
+          <Input placeholder="Dark input" />
+          <Card title="Dark card" subtitle="Surface 1">
+            Deep dark surfaces.
+          </Card>
+        </div>
       </div>
-    </KovaTheme>
+
+      {/* Divider */}
+      <div style={{ width: '1px', background: 'rgba(128,128,128,0.2)' }} />
+
+      {/* Light panel */}
+      <div
+        data-theme="light"
+        style={{ flex: 1, background: 'var(--k-bg)', padding: '2rem', transition: 'background 300ms' }}
+      >
+        <div
+          style={{
+            marginBottom: '1rem',
+            fontFamily: 'var(--k-font-display)',
+            fontWeight: 700,
+            color: 'var(--k-text-muted)',
+            fontSize: '11px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Light
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Button variant="solid" size="sm">
+              Solid
+            </Button>
+            <Button variant="ghost" size="sm">
+              Ghost
+            </Button>
+          </div>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <Badge variant="accent">New</Badge>
+            <Badge variant="success" dot>
+              Live
+            </Badge>
+          </div>
+          <Input placeholder="Light input" />
+          <Card title="Light card" subtitle="Surface 1">
+            Clean light surfaces.
+          </Card>
+        </div>
+      </div>
+    </div>
   ),
 };

@@ -3,17 +3,23 @@
 .k-card {
   background: t.$surface-1;
   border: 0.5px solid t.$border;
-  border-radius: var(--k-r-lg);
+  border-radius: t.$r-lg;
   padding: 1.5rem;
   position: relative;
   overflow: hidden;
-  transition: border-color t.$dur-base, box-shadow t.$dur-base;
+  transition:
+    border-color t.$dur-base,
+    box-shadow t.$dur-base;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%), rgba(139,92,246,0.04) 0%, transparent 60%);
+    background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(139, 92, 246, 0.04) 0%,
+      transparent 60%
+    );
     pointer-events: none;
     opacity: 0;
     transition: opacity t.$dur-slow;
@@ -22,14 +28,42 @@
   &:hover {
     border-color: t.$border-hover;
     box-shadow: t.$shadow-md;
-    &::before { opacity: 1; }
+
+    &::before {
+      opacity: 1;
+    }
   }
 
-  &-glow { border-color: rgba(139,92,246,0.3); box-shadow: 0 0 40px t.$accent-glow; }
-  &-header { margin-bottom: 1rem; }
-  &-title { font-family: t.$font-display; font-size: 16px; font-weight: 700; color: t.$text; letter-spacing: -0.01em; }
-  &-subtitle { font-size: 13px; color: t.$text-muted; margin-top: 4px; font-family: t.$font-mono; }
-  &-body { color: t.$text-muted; font-size: 14px; line-height: 1.7; }
+  &-glow {
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 40px t.$accent-glow;
+  }
+
+  &-header {
+    margin-bottom: 1rem;
+  }
+
+  &-title {
+    font-family: t.$font-display;
+    font-size: 16px;
+    font-weight: 700;
+    color: t.$text;
+    letter-spacing: -0.01em;
+  }
+
+  &-subtitle {
+    font-size: 13px;
+    color: t.$text-muted;
+    margin-top: 4px;
+    font-family: t.$font-mono;
+  }
+
+  &-body {
+    color: t.$text-muted;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
   &-footer {
     margin-top: 1.25rem;
     padding-top: 1rem;

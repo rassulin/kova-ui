@@ -11,11 +11,14 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   border: none;
-  border-radius: var(--k-r-md);
+  border-radius: t.$r-md;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: transform t.$dur-fast t.$ease, opacity t.$dur-fast t.$ease-snappy, box-shadow t.$dur-base t.$ease;
+  transition:
+    transform t.$dur-fast t.$ease,
+    opacity t.$dur-fast t.$ease-snappy,
+    box-shadow t.$dur-base t.$ease;
   white-space: nowrap;
   text-decoration: none;
   user-select: none;
@@ -28,48 +31,138 @@
     background: rgba(255, 255, 255, 0);
     transition: background t.$dur-fast;
   }
-  &:hover::before  { background: rgba(128, 128, 128, 0.08); }
-  &:active         { transform: scale(0.97); }
-  &:active::before { background: rgba(128, 128, 128, 0.04); }
-  &:disabled       { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
-  &-loading { pointer-events: none; .k-btn-text { opacity: 0.4; } }
+  &:hover::before {
+    background: rgba(128, 128, 128, 0.08);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:active::before {
+    background: rgba(128, 128, 128, 0.04);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &-loading {
+    pointer-events: none;
+
+    .k-btn-text {
+      opacity: 0.4;
+    }
+  }
 
   // Sizes — explicit CSS vars for radius so KovaTheme radius scaling works
-  &-xs { height: 28px; padding: 0 12px; font-size: 11px; border-radius: var(--k-r-sm); }
-  &-sm { height: 34px; padding: 0 16px; font-size: 12px; border-radius: var(--k-r-md); }
-  &-md { height: 40px; padding: 0 20px; font-size: 13px; border-radius: var(--k-r-md); }
-  &-lg { height: 48px; padding: 0 28px; font-size: 14px; border-radius: var(--k-r-lg); }
-  &-xl { height: 56px; padding: 0 36px; font-size: 15px; border-radius: var(--k-r-lg); letter-spacing: 0.06em; }
+  &-xs {
+    height: 28px;
+    padding: 0 12px;
+    font-size: 11px;
+    border-radius: t.$r-sm;
+  }
+
+  &-sm {
+    height: 34px;
+    padding: 0 16px;
+    font-size: 12px;
+    border-radius: t.$r-md;
+  }
+
+  &-md {
+    height: 40px;
+    padding: 0 20px;
+    font-size: 13px;
+    border-radius: t.$r-md;
+  }
+
+  &-lg {
+    height: 48px;
+    padding: 0 28px;
+    font-size: 14px;
+    border-radius: t.$r-lg;
+  }
+
+  &-xl {
+    height: 56px;
+    padding: 0 36px;
+    font-size: 15px;
+    border-radius: t.$r-lg;
+    letter-spacing: 0.06em;
+  }
 
   &-icon {
-    padding: 0; width: 40px; height: 40px;
-    &.k-btn-sm { width: 34px; height: 34px; }
-    &.k-btn-lg { width: 48px; height: 48px; }
+    padding: 0;
+    width: 40px;
+    height: 40px;
+
+    &.k-btn-sm {
+      width: 34px;
+      height: 34px;
+    }
+
+    &.k-btn-lg {
+      width: 48px;
+      height: 48px;
+    }
   }
 
   &-solid {
-    background: t.$accent; color: #fff;
-    &:hover { box-shadow: t.$shadow-accent; }
+    background: t.$accent;
+    color: #fff;
+
+    &:hover {
+      box-shadow: t.$shadow-accent;
+    }
   }
+
   &-solid-cyan {
-    background: t.$cyan; color: #0d0d0f;
-    &:hover { box-shadow: t.$shadow-cyan; }
+    background: t.$cyan;
+    color: #0d0d0f;
+
+    &:hover {
+      box-shadow: t.$shadow-cyan;
+    }
   }
+
   &-ghost {
-    background: transparent; color: t.$text;
-    border: 0.5px solid t.$border; box-shadow: t.$shadow-sm;
-    &:hover { border-color: t.$border-hover; }
+    background: transparent;
+    color: t.$text;
+    border: 0.5px solid t.$border;
+    box-shadow: t.$shadow-sm;
+
+    &:hover {
+      border-color: t.$border-hover;
+    }
   }
+
   &-outline {
-    background: transparent; color: t.$accent-light; border: 1px solid t.$accent;
-    &:hover { background: t.$accent-glow; }
+    background: transparent;
+    color: t.$accent-light;
+    border: 1px solid t.$accent;
+
+    &:hover {
+      background: t.$accent-glow;
+    }
   }
+
   &-danger {
-    background: rgba(248,113,113,0.15); color: t.$red; border: 0.5px solid rgba(248,113,113,0.3);
-    &:hover { background: rgba(248,113,113,0.25); }
+    background: rgba(248, 113, 113, 0.15);
+    color: t.$red;
+    border: 0.5px solid rgba(248, 113, 113, 0.3);
+
+    &:hover {
+      background: rgba(248, 113, 113, 0.25);
+    }
   }
+
   &-success {
-    background: rgba(74,222,128,0.12); color: t.$green; border: 0.5px solid rgba(74,222,128,0.25);
+    background: rgba(74, 222, 128, 0.12);
+    color: t.$green;
+    border: 0.5px solid rgba(74, 222, 128, 0.25);
   }
 }

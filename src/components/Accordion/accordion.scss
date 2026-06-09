@@ -1,15 +1,61 @@
 @use '../../tokens' as t;
 
 .k-accordion {
-  display: flex; flex-direction: column; border: 0.5px solid t.$border; border-radius: var(--k-r-lg); overflow: hidden;
-  &-item { border-bottom: 0.5px solid t.$border; &:last-child { border-bottom: none; } &.k-accordion-open .k-accordion-chevron { transform: rotate(180deg); } }
-  &-trigger {
-    display: flex; align-items: center; justify-content: space-between; padding: 16px 20px;
-    background: transparent; border: none; color: t.$text; font-family: t.$font-display; font-size: 14px; font-weight: 600;
-    cursor: pointer; width: 100%; text-align: left; transition: background t.$dur-fast;
-    &:hover { background: t.$surface-2; }
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid t.$border;
+  border-radius: t.$r-lg;
+  overflow: hidden;
+
+  &-item {
+    border-bottom: 0.5px solid t.$border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.k-accordion-open .k-accordion-chevron {
+      transform: rotate(180deg);
+    }
   }
-  &-chevron  { transition: transform t.$dur-base t.$ease; color: t.$text-muted; flex-shrink: 0; }
-  &-body     { overflow: hidden; transition: max-height t.$dur-slow t.$ease; }
-  &-content  { padding: 4px 20px 20px; font-family: t.$font-mono; font-size: 13px; color: t.$text-muted; line-height: 1.7; }
+
+  &-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: transparent;
+    border: none;
+    color: t.$text;
+    font-family: t.$font-display;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: background t.$dur-fast;
+
+    &:hover {
+      background: t.$surface-2;
+    }
+  }
+
+  &-chevron {
+    transition: transform t.$dur-base t.$ease;
+    color: t.$text-muted;
+    flex-shrink: 0;
+  }
+
+  &-body {
+    overflow: hidden;
+    transition: max-height t.$dur-slow t.$ease;
+  }
+
+  &-content {
+    padding: 4px 20px 20px;
+    font-family: t.$font-mono;
+    font-size: 13px;
+    color: t.$text-muted;
+    line-height: 1.7;
+  }
 }

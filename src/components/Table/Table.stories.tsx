@@ -60,31 +60,30 @@ type Story = StoryObj<typeof meta>;
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-// biome-ignore lint/suspicious/noExplicitAny: story data typing
 const STATUS: Record<string, any> = { Live: 'success', Beta: 'cyan', Failed: 'danger', RC: 'warning' };
 const STATUSES = ['Live', 'Live', 'Live', 'Beta', 'Failed', 'RC'];
-const AUTHORS  = ['Rustam N', 'Alice C', 'Bob K', 'Carol M', 'Dave P', 'Eva R'];
+const AUTHORS = ['Rustam N', 'Alice C', 'Bob K', 'Carol M', 'Dave P', 'Eva R'];
 const PROJECTS = ['kova-ui', 'dashboard-v2', 'api-gateway', 'auth-service', 'billing-api', 'analytics'];
 
 function makeRow(i: number) {
   return {
-    id:      String(i + 1),
-    name:    `${PROJECTS[i % PROJECTS.length]}${i >= PROJECTS.length ? `-${Math.floor(i / PROJECTS.length) + 1}` : ''}`,
-    status:  STATUSES[i % STATUSES.length],
-    build:   `${10 + (i * 7) % 80}s`,
+    id: String(i + 1),
+    name: `${PROJECTS[i % PROJECTS.length]}${i >= PROJECTS.length ? `-${Math.floor(i / PROJECTS.length) + 1}` : ''}`,
+    status: STATUSES[i % STATUSES.length],
+    build: `${10 + ((i * 7) % 80)}s`,
     version: `v${1 + (i % 4)}.${i % 10}.${i % 5}`,
-    author:  AUTHORS[i % AUTHORS.length],
+    author: AUTHORS[i % AUTHORS.length],
   };
 }
 
-const SMALL  = Array.from({ length: 5  }, (_, i) => makeRow(i));
+const SMALL = Array.from({ length: 5 }, (_, i) => makeRow(i));
 const MEDIUM = Array.from({ length: 47 }, (_, i) => makeRow(i));
 
 const COLS = [
-  { key: 'name',    title: 'Project',  sortable: true },
+  { key: 'name', title: 'Project', sortable: true },
   {
-    key: 'author', title: 'Author',
-    // biome-ignore lint/suspicious/noExplicitAny: render helpers
+    key: 'author',
+    title: 'Author',
     render: (_: any, row: any) => (
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <Avatar name={row.author} size="sm" />
@@ -93,13 +92,15 @@ const COLS = [
     ),
   },
   {
-    key: 'status', title: 'Status',
-    // biome-ignore lint/suspicious/noExplicitAny: render helpers
+    key: 'status',
+    title: 'Status',
     render: (v: any) => (
-      <Badge variant={STATUS[v] ?? 'default'} dot>{v}</Badge>
+      <Badge variant={STATUS[v] ?? 'default'} dot>
+        {v}
+      </Badge>
     ),
   },
-  { key: 'build',   title: 'Build',   sortable: true },
+  { key: 'build', title: 'Build', sortable: true },
   { key: 'version', title: 'Version', sortable: true },
 ];
 
@@ -110,25 +111,12 @@ export const Default: Story = {
 };
 
 export const Sortable: Story = {
-  render: () => (
-    <Table
-      columns={COLS}
-      data={SMALL}
-      rowKey="id"
-    />
-  ),
+  render: () => <Table columns={COLS} data={SMALL} rowKey="id" />,
 };
 
 export const Pagination: Story = {
   name: 'Client-side Pagination',
-  render: () => (
-    <Table
-      columns={COLS}
-      data={MEDIUM}
-      rowKey="id"
-      pagination
-    />
-  ),
+  render: () => <Table columns={COLS} data={MEDIUM} rowKey="id" pagination />,
 };
 
 export const CustomPageSizes: Story = {
@@ -147,13 +135,23 @@ export const ServerSide: Story = {
   name: 'Server-side Pagination',
   render: () => {
     function Demo() {
-      const [page, setPage]         = useState(1);
+      const [page, setPage] = useState(1);
       const [pageSize, setPageSize] = useState(5);
       const totalRows = 47;
       const rows = MEDIUM.slice((page - 1) * pageSize, page * pageSize);
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ fontFamily: 'var(--k-font-mono)', fontSize: '12px', color: 'var(--k-text-muted)', padding: '6px 12px', background: 'var(--k-surface-2)', borderRadius: 'var(--k-r-md)', display: 'inline-block' }}>
+          <div
+            style={{
+              fontFamily: 'var(--k-font-mono)',
+              fontSize: '12px',
+              color: 'var(--k-text-muted)',
+              padding: '6px 12px',
+              background: 'var(--k-surface-2)',
+              borderRadius: 'var(--k-r-md)',
+              display: 'inline-block',
+            }}
+          >
             GET /api/deployments?page={page}&pageSize={pageSize}
           </div>
           <Table
@@ -170,6 +168,7 @@ export const ServerSide: Story = {
         </div>
       );
     }
+
     return <Demo />;
   },
 };
@@ -189,12 +188,22 @@ export const Selectable: Story = {
             selectedKeys={selected}
             onSelectionChange={setSelected}
           />
-          <div style={{ fontFamily: 'var(--k-font-mono)', fontSize: '12px', color: 'var(--k-text-muted)', padding: '8px 12px', background: 'var(--k-surface-2)', borderRadius: 'var(--k-r-md)' }}>
+          <div
+            style={{
+              fontFamily: 'var(--k-font-mono)',
+              fontSize: '12px',
+              color: 'var(--k-text-muted)',
+              padding: '8px 12px',
+              background: 'var(--k-surface-2)',
+              borderRadius: 'var(--k-r-md)',
+            }}
+          >
             Selected IDs: {selected.length > 0 ? selected.join(', ') : 'none'}
           </div>
         </div>
       );
     }
+
     return <Demo />;
   },
 };
@@ -215,12 +224,22 @@ export const SelectableWithPagination: Story = {
             onSelectionChange={setSelected}
             pagination={{ defaultPageSize: 5, pageSizeOptions: [5, 10, 25] }}
           />
-          <div style={{ fontFamily: 'var(--k-font-mono)', fontSize: '12px', color: 'var(--k-text-muted)', padding: '8px 12px', background: 'var(--k-surface-2)', borderRadius: 'var(--k-r-md)' }}>
+          <div
+            style={{
+              fontFamily: 'var(--k-font-mono)',
+              fontSize: '12px',
+              color: 'var(--k-text-muted)',
+              padding: '8px 12px',
+              background: 'var(--k-surface-2)',
+              borderRadius: 'var(--k-r-md)',
+            }}
+          >
             {selected.length} row{selected.length !== 1 ? 's' : ''} selected across all pages
           </div>
         </div>
       );
     }
+
     return <Demo />;
   },
 };
@@ -230,11 +249,21 @@ export const SelectableWithRowClick: Story = {
   render: () => {
     function Demo() {
       const [selected, setSelected] = useState<string[]>([]);
-      const [clicked,  setClicked]  = useState<string | null>(null);
+      const [clicked, setClicked] = useState<string | null>(null);
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ fontFamily: 'var(--k-font-mono)', fontSize: '12px', color: 'var(--k-text-muted)', padding: '8px 12px', background: 'var(--k-surface-2)', borderRadius: 'var(--k-r-md)' }}>
-            Checkbox = select row &nbsp;|&nbsp; Click data cell = {clicked ? <strong style={{ color: 'var(--k-accent-light)' }}>{clicked}</strong> : 'nothing yet'}
+          <div
+            style={{
+              fontFamily: 'var(--k-font-mono)',
+              fontSize: '12px',
+              color: 'var(--k-text-muted)',
+              padding: '8px 12px',
+              background: 'var(--k-surface-2)',
+              borderRadius: 'var(--k-r-md)',
+            }}
+          >
+            Checkbox = select row &nbsp;|&nbsp; Click data cell ={' '}
+            {clicked ? <strong style={{ color: 'var(--k-accent-light)' }}>{clicked}</strong> : 'nothing yet'}
           </div>
           <Table
             columns={COLS}
@@ -248,20 +277,17 @@ export const SelectableWithRowClick: Story = {
         </div>
       );
     }
+
     return <Demo />;
   },
 };
 
 export const Striped: Story = {
-  render: () => (
-    <Table columns={COLS} data={SMALL} rowKey="id" striped />
-  ),
+  render: () => <Table columns={COLS} data={SMALL} rowKey="id" striped />,
 };
 
 export const Loading: Story = {
-  render: () => (
-    <Table columns={COLS} data={[]} rowKey="id" loading pagination={{ defaultPageSize: 5 }} />
-  ),
+  render: () => <Table columns={COLS} data={[]} rowKey="id" loading pagination={{ defaultPageSize: 5 }} />,
 };
 
 export const Empty: Story = {

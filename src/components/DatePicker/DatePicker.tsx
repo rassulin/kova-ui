@@ -1,6 +1,6 @@
 import './datepicker.scss';
 import { h } from 'preact';
-import { useState, useRef, useEffect, useCallback } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { generateId } from '../../utils/generateId';
 
 const DAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -105,6 +105,7 @@ export function DatePicker({
   const wrapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const id = useRef(generateId('dp')).current;
+  const popupId = `${id}-popup`;
 
   // Sync display when value prop changes externally
   useEffect(() => {
@@ -222,8 +223,10 @@ export function DatePicker({
             value={inputVal}
             placeholder={ph}
             disabled={disabled}
+            role="combobox"
             aria-haspopup="dialog"
             aria-expanded={open}
+            aria-controls={popupId}
             onInput={handleInputChange}
             onFocus={() => !disabled && setOpen(true)}
             readOnly
@@ -245,7 +248,7 @@ export function DatePicker({
       {hint && !error && <span class="k-hint">{hint}</span>}
 
       {open && (
-        <div class="k-dp-popover" role="dialog" aria-label="Date picker">
+        <div id={popupId} class="k-dp-popover" role="dialog" aria-label="Date picker">
           {/* Header */}
           <div class="k-dp-header">
             <button class="k-dp-nav" onClick={prevMonth} aria-label="Previous month" type="button">

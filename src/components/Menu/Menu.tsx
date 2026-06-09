@@ -1,6 +1,6 @@
 import './menu.scss';
-import { h, ComponentChildren } from 'preact';
-import { useState, useEffect, useRef } from 'preact/hooks';
+import { ComponentChildren, h } from 'preact';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 export interface MenuItem {
   key: string;
@@ -34,7 +34,15 @@ export function Menu({ trigger, items, align = 'left', class: className = '' }: 
 
   return (
     <div class={['k-menu-wrap', className].filter(Boolean).join(' ')} ref={ref}>
-      <div onClick={() => setOpen(o => !o)} style={{ display: 'inline-flex', cursor: 'pointer' }}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setOpen(o => !o)}
+        onKeyDown={(e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') setOpen(o => !o);
+        }}
+        style={{ display: 'inline-flex', cursor: 'pointer' }}
+      >
         {trigger}
       </div>
       {open && (

@@ -11,7 +11,9 @@
     width: 100%;
   }
 
-  &-input-row { position: relative; }
+  &-input-row {
+    position: relative;
+  }
 
   &-input {
     padding-right: 40px !important;
@@ -34,8 +36,13 @@
     padding: 0;
     transition: color t.$dur-fast;
 
-    &:hover { color: t.$text; }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:hover {
+      color: t.$text;
+    }
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   }
 
   // ── Popover calendar ───────────────────────────────────────────────────────
@@ -46,7 +53,7 @@
     z-index: 1000;
     background: t.$surface-1;
     border: 0.5px solid t.$border;
-    border-radius: var(--k-r-lg);
+    border-radius: t.$r-lg;
     box-shadow: t.$shadow-lg;
     padding: 12px;
     width: 280px;
@@ -75,12 +82,15 @@
     justify-content: center;
     width: 28px;
     height: 28px;
-    border-radius: var(--k-r-sm);
+    border-radius: t.$r-sm;
     border: 0.5px solid t.$border;
     background: transparent;
     color: t.$text-muted;
     cursor: pointer;
-    transition: background t.$dur-fast, color t.$dur-fast, border-color t.$dur-fast;
+    transition:
+      background t.$dur-fast,
+      color t.$dur-fast,
+      border-color t.$dur-fast;
 
     &:hover {
       background: t.$surface-2;
@@ -116,14 +126,16 @@
     align-items: center;
     justify-content: center;
     height: 32px;
-    border-radius: var(--k-r-sm);
+    border-radius: t.$r-sm;
     border: none;
     background: transparent;
     font-family: t.$font-mono;
     font-size: 12px;
     color: t.$text;
     cursor: pointer;
-    transition: background t.$dur-fast, color t.$dur-fast;
+    transition:
+      background t.$dur-fast,
+      color t.$dur-fast;
 
     &:hover:not(:disabled):not(.k-dp-cell--selected) {
       background: t.$surface-2;
@@ -159,7 +171,9 @@
       color: #fff;
       font-weight: 600;
 
-      &:hover { background: t.$accent-light; }
+      &:hover {
+        background: t.$accent-light;
+      }
     }
 
     // Disabled
@@ -193,25 +207,41 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    border-radius: var(--k-r-sm);
+    border-radius: t.$r-sm;
     padding: 4px 10px;
-    transition: background t.$dur-fast, color t.$dur-fast;
+    transition:
+      background t.$dur-fast,
+      color t.$dur-fast;
 
-    &:disabled { opacity: 0.35; cursor: not-allowed; }
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 
   &-today-btn {
     color: t.$accent-light;
-    &:hover:not(:disabled) { background: t.$accent-glow; }
+    &:hover:not(:disabled) {
+      background: t.$accent-glow;
+    }
   }
 
   &-clear-btn {
     color: t.$text-muted;
-    &:hover { background: t.$surface-2; color: t.$text; }
+    &:hover {
+      background: t.$surface-2;
+      color: t.$text;
+    }
   }
 }
 
 @keyframes k-dp-in {
-  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0)    scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

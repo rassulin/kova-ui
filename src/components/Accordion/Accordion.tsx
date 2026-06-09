@@ -1,6 +1,6 @@
 import './accordion.scss';
-import { h, ComponentChildren } from 'preact';
-import { useState, useRef, useEffect } from 'preact/hooks';
+import { ComponentChildren, h } from 'preact';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 export interface AccordionItem {
   key: string;

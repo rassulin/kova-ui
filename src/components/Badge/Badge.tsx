@@ -1,5 +1,5 @@
 import './badge.scss';
-import { h, ComponentChildren } from 'preact';
+import { ComponentChildren, h } from 'preact';
 
 export type BadgeVariant = 'default' | 'accent' | 'cyan' | 'success' | 'warning' | 'danger' | 'pink';
 

@@ -1,5 +1,5 @@
 import './input.scss';
-import { h, ComponentChildren } from 'preact';
+import { ComponentChildren, h } from 'preact';
 
 export interface InputProps {
   label?: string;

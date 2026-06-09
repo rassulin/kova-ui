@@ -1,5 +1,5 @@
 import './avatar.scss';
-import { h, ComponentChildren } from 'preact';
+import { h } from 'preact';
 
 const COLORS = ['#8b5cf6', '#22d3ee', '#4ade80', '#f472b6', '#fbbf24', '#f87171', '#60a5fa'];
 

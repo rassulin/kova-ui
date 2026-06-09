@@ -6,26 +6,61 @@
 // Each step is a (font-size, line-height) pair — they're coupled by design.
 
 $text-sizes: (
-  'xs':  (11px, 1.5),
-  'sm':  (13px, 1.6),
-  'md':  (15px, 1.7),   // default body
-  'lg':  (17px, 1.6),
-  'xl':  (20px, 1.5),
-  '2xl': (24px, 1.4),
+  'xs': (
+    11px,
+    1.5,
+  ),
+  'sm': (
+    13px,
+    1.6,
+  ),
+  'md': (
+    15px,
+    1.7,
+  ),
+  // default body
+  'lg': (
+      17px,
+      1.6,
+    ),
+  'xl': (
+    20px,
+    1.5,
+  ),
+  '2xl': (
+    24px,
+    1.4,
+  ),
 );
 
 $display-sizes: (
-  'sm':  (28px, 1.2, -0.02em),
-  'md':  (36px, 1.15, -0.03em),
-  'lg':  (48px, 1.1,  -0.04em),
-  'xl':  (64px, 1.05, -0.04em),
+  'sm': (
+    28px,
+    1.2,
+    -0.02em,
+  ),
+  'md': (
+    36px,
+    1.15,
+    -0.03em,
+  ),
+  'lg': (
+    48px,
+    1.1,
+    -0.04em,
+  ),
+  'xl': (
+    64px,
+    1.05,
+    -0.04em,
+  ),
 );
 
 $weights: (
-  'normal':    400,
-  'medium':    500,
-  'semibold':  600,
-  'bold':      700,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700,
   'extrabold': 800,
 );
 
@@ -40,19 +75,43 @@ $weights: (
 
 // ── Headings (H1–H6) ─────────────────────────────────────────────────────────
 
-.k-h1, .k-h2, .k-h3, .k-h4, .k-h5, .k-h6 {
+.k-h1,
+.k-h2,
+.k-h3,
+.k-h4,
+.k-h5,
+.k-h6 {
   @extend %typo-base;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.15;
 }
 
-.k-h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); letter-spacing: -0.04em; }
-.k-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem);  letter-spacing: -0.035em; }
-.k-h3 { font-size: clamp(1.375rem, 2vw, 1.875rem); letter-spacing: -0.025em; }
-.k-h4 { font-size: 1.375rem; letter-spacing: -0.02em; }
-.k-h5 { font-size: 1.125rem; letter-spacing: -0.01em; }
-.k-h6 { font-size: 0.9375rem; letter-spacing: 0; font-weight: 700; }
+.k-h1 {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  letter-spacing: -0.04em;
+}
+.k-h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  letter-spacing: -0.035em;
+}
+.k-h3 {
+  font-size: clamp(1.375rem, 2vw, 1.875rem);
+  letter-spacing: -0.025em;
+}
+.k-h4 {
+  font-size: 1.375rem;
+  letter-spacing: -0.02em;
+}
+.k-h5 {
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+.k-h6 {
+  font-size: 0.9375rem;
+  letter-spacing: 0;
+  font-weight: 700;
+}
 
 // ── Display text (hero / marketing) ──────────────────────────────────────────
 
@@ -62,8 +121,8 @@ $weights: (
 
   @each $name, $vals in $display-sizes {
     &-#{$name} {
-      font-size:      nth($vals, 1);
-      line-height:    nth($vals, 2);
+      font-size: nth($vals, 1);
+      line-height: nth($vals, 2);
       letter-spacing: nth($vals, 3);
     }
   }
@@ -89,26 +148,42 @@ $weights: (
   // Size variants
   @each $name, $vals in $text-sizes {
     &-#{$name} {
-      font-size:   nth($vals, 1);
+      font-size: nth($vals, 1);
       line-height: nth($vals, 2);
     }
   }
 
   // Weight modifiers
   @each $name, $val in $weights {
-    &-#{$name} { font-weight: $val; }
+    &-#{$name} {
+      font-weight: $val;
+    }
   }
 
   // Color modifiers
-  &-muted  { color: t.$text-muted; }
-  &-subtle { color: t.$text-subtle; }
-  &-accent { color: t.$accent-light; }
-  &-success { color: t.$green; }
-  &-danger  { color: t.$red; }
-  &-warning { color: t.$amber; }
+  &-muted {
+    color: t.$text-muted;
+  }
+  &-subtle {
+    color: t.$text-subtle;
+  }
+  &-accent {
+    color: t.$accent-light;
+  }
+  &-success {
+    color: t.$green;
+  }
+  &-danger {
+    color: t.$red;
+  }
+  &-warning {
+    color: t.$amber;
+  }
 
   // Mono
-  &-mono { font-family: t.$font-mono; }
+  &-mono {
+    font-family: t.$font-mono;
+  }
 
   // Truncate
   &-truncate {
@@ -177,18 +252,28 @@ $weights: (
   // Variants
   &-muted {
     color: t.$text-muted;
-    &::after { background: t.$text-muted; }
-    &:hover  { color: t.$text; }
+    &::after {
+      background: t.$text-muted;
+    }
+    &:hover {
+      color: t.$text;
+    }
   }
 
   &-danger {
     color: t.$red;
-    &::after { background: t.$red; }
-    &:hover  { color: t.$red; }
+    &::after {
+      background: t.$red;
+    }
+    &:hover {
+      color: t.$red;
+    }
   }
 
   // External arrow
-  &-external::after { content: none; }
+  &-external::after {
+    content: none;
+  }
   &-external::before {
     content: ' ↗';
     font-size: 0.8em;
@@ -203,7 +288,7 @@ $weights: (
   padding: 1rem 1.25rem;
   border-left: 3px solid t.$accent;
   background: rgba(139, 92, 246, 0.05);
-  border-radius: 0 var(--k-r-md) var(--k-r-md) 0;
+  border-radius: 0 t.$r-md t.$r-md 0;
   font-family: t.$font-display;
   font-size: 15px;
   line-height: 1.7;
@@ -218,18 +303,45 @@ $weights: (
     color: t.$text-subtle;
     font-family: t.$font-mono;
 
-    &::before { content: '— '; }
+    &::before {
+      content: '— ';
+    }
   }
 }
 
 // ── Banner ────────────────────────────────────────────────────────────────────
 
 $banner-variants: (
-  'info':    (rgba(139, 92, 246, 0.08), t.$accent,       rgba(139, 92, 246, 0.25), t.$accent-light),
-  'success': (rgba(74, 222, 128, 0.07), t.$green,        rgba(74, 222, 128, 0.2),  t.$green),
-  'warning': (rgba(251, 191, 36, 0.08), t.$amber,        rgba(251, 191, 36, 0.2),  t.$amber),
-  'danger':  (rgba(248, 113, 113, 0.08), t.$red,         rgba(248, 113, 113, 0.2), t.$red),
-  'neutral': (t.$surface-2, t.$text-subtle, t.$border, t.$text-muted),
+  'info': (
+    rgba(139, 92, 246, 0.08),
+    t.$accent,
+    rgba(139, 92, 246, 0.25),
+    t.$accent-light,
+  ),
+  'success': (
+    rgba(74, 222, 128, 0.07),
+    t.$green,
+    rgba(74, 222, 128, 0.2),
+    t.$green,
+  ),
+  'warning': (
+    rgba(251, 191, 36, 0.08),
+    t.$amber,
+    rgba(251, 191, 36, 0.2),
+    t.$amber,
+  ),
+  'danger': (
+    rgba(248, 113, 113, 0.08),
+    t.$red,
+    rgba(248, 113, 113, 0.2),
+    t.$red,
+  ),
+  'neutral': (
+    t.$surface-2,
+    t.$text-subtle,
+    t.$border,
+    t.$text-muted,
+  ),
 );
 
 .k-banner {
@@ -237,18 +349,22 @@ $banner-variants: (
   align-items: flex-start;
   gap: 12px;
   padding: 14px 16px;
-  border-radius: var(--k-r-lg);
+  border-radius: t.$r-lg;
   border: 0.5px solid;
   position: relative;
   overflow: hidden;
 
   @each $name, $vals in $banner-variants {
     &-#{$name} {
-      background:   nth($vals, 1);
+      background: nth($vals, 1);
       border-color: nth($vals, 3);
 
-      .k-banner-icon  { color: nth($vals, 2); }
-      .k-banner-title { color: nth($vals, 4); }
+      .k-banner-icon {
+        color: nth($vals, 2);
+      }
+      .k-banner-title {
+        color: nth($vals, 4);
+      }
     }
   }
 
@@ -257,9 +373,11 @@ $banner-variants: (
     margin-top: 1px;
   }
 
-  &-body   { flex: 1; }
+  &-body {
+    flex: 1;
+  }
 
-  &-title  {
+  &-title {
     font-family: t.$font-display;
     font-size: 13px;
     font-weight: 700;
@@ -284,7 +402,9 @@ $banner-variants: (
     flex-shrink: 0;
     transition: color t.$dur-fast;
 
-    &:hover { color: t.$text; }
+    &:hover {
+      color: t.$text;
+    }
   }
 }
 
@@ -300,7 +420,7 @@ $banner-variants: (
   background: t.$surface-3;
   border: 0.5px solid t.$border;
   border-bottom-width: 2px;
-  border-radius: var(--k-r-sm);
+  border-radius: t.$r-sm;
   color: t.$text-muted;
   letter-spacing: 0.03em;
 }

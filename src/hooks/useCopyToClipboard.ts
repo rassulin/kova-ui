@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'preact/hooks';
+import { useCallback, useState } from 'preact/hooks';
 
 export interface UseCopyToClipboardReturn {
   copied: boolean;

@@ -8,7 +8,12 @@ const meta = {
   component: Button,
   tags: ['autodocs'],
   decorators: [
-    (Story: () => h.JSX.Element) => <><SpriteSheet /><Story /></>,
+    (Story: () => h.JSX.Element) => (
+      <>
+        <SpriteSheet />
+        <Story />
+      </>
+    ),
   ],
   parameters: {
     docs: {
@@ -19,8 +24,8 @@ const meta = {
   },
   argTypes: {
     variant: { control: 'select', options: ['solid', 'solid-cyan', 'ghost', 'outline', 'danger', 'success'] },
-    size:    { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
-    loading:  { control: 'boolean' },
+    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
+    loading: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
 } satisfies Meta<typeof Button>;
@@ -66,11 +71,21 @@ export const WithLeadingIcon: Story = {
   name: 'Leading Icon',
   render: () => (
     <div style={row}>
-      <Button variant="solid"   icon="download">Download</Button>
-      <Button variant="ghost"   icon="search">Search</Button>
-      <Button variant="outline" icon="plus">New item</Button>
-      <Button variant="danger"  icon="trash">Delete</Button>
-      <Button variant="success" icon="check">Confirm</Button>
+      <Button variant="solid" icon="download">
+        Download
+      </Button>
+      <Button variant="ghost" icon="search">
+        Search
+      </Button>
+      <Button variant="outline" icon="plus">
+        New item
+      </Button>
+      <Button variant="danger" icon="trash">
+        Delete
+      </Button>
+      <Button variant="success" icon="check">
+        Confirm
+      </Button>
     </div>
   ),
 };
@@ -79,9 +94,15 @@ export const WithTrailingIcon: Story = {
   name: 'Trailing Icon',
   render: () => (
     <div style={row}>
-      <Button variant="solid"   iconRight="arrow-right">Continue</Button>
-      <Button variant="ghost"   iconRight="external-link">Open docs</Button>
-      <Button variant="outline" iconRight="chevron-down">Options</Button>
+      <Button variant="solid" iconRight="arrow-right">
+        Continue
+      </Button>
+      <Button variant="ghost" iconRight="external-link">
+        Open docs
+      </Button>
+      <Button variant="outline" iconRight="chevron-down">
+        Options
+      </Button>
     </div>
   ),
 };
@@ -90,8 +111,12 @@ export const BothIcons: Story = {
   name: 'Both Icons',
   render: () => (
     <div style={row}>
-      <Button variant="solid" icon="git-branch" iconRight="chevron-down">main</Button>
-      <Button variant="ghost" icon="filter" iconRight="chevron-down">Filter</Button>
+      <Button variant="solid" icon="git-branch" iconRight="chevron-down">
+        main
+      </Button>
+      <Button variant="ghost" icon="filter" iconRight="chevron-down">
+        Filter
+      </Button>
     </div>
   ),
 };
@@ -100,12 +125,12 @@ export const IconOnly: Story = {
   name: 'Icon Only',
   render: () => (
     <div style={row}>
-      <Button variant="ghost"   icon="search"        iconOnly label="Search" size="sm" />
-      <Button variant="ghost"   icon="settings"      iconOnly label="Settings" size="sm" />
-      <Button variant="ghost"   icon="more-vertical" iconOnly label="More" size="sm" />
-      <Button variant="outline" icon="edit"          iconOnly label="Edit" />
-      <Button variant="danger"  icon="trash"         iconOnly label="Delete" />
-      <Button variant="solid"   icon="plus"          iconOnly label="Add" size="lg" />
+      <Button variant="ghost" icon="search" iconOnly label="Search" size="sm" />
+      <Button variant="ghost" icon="settings" iconOnly label="Settings" size="sm" />
+      <Button variant="ghost" icon="more-vertical" iconOnly label="More" size="sm" />
+      <Button variant="outline" icon="edit" iconOnly label="Edit" />
+      <Button variant="danger" icon="trash" iconOnly label="Delete" />
+      <Button variant="solid" icon="plus" iconOnly label="Add" size="lg" />
     </div>
   ),
 };
@@ -113,9 +138,15 @@ export const IconOnly: Story = {
 export const Loading: Story = {
   render: () => (
     <div style={row}>
-      <Button variant="solid"   loading>Deploying...</Button>
-      <Button variant="ghost"   loading icon="download">Downloading</Button>
-      <Button variant="outline" loading>Processing</Button>
+      <Button variant="solid" loading>
+        Deploying...
+      </Button>
+      <Button variant="ghost" loading icon="download">
+        Downloading
+      </Button>
+      <Button variant="outline" loading>
+        Processing
+      </Button>
     </div>
   ),
 };
@@ -123,8 +154,12 @@ export const Loading: Story = {
 export const Disabled: Story = {
   render: () => (
     <div style={row}>
-      <Button variant="solid"  disabled icon="check">Confirm</Button>
-      <Button variant="ghost"  disabled>Cancel</Button>
+      <Button variant="solid" disabled icon="check">
+        Confirm
+      </Button>
+      <Button variant="ghost" disabled>
+        Cancel
+      </Button>
       <Button variant="danger" disabled icon="trash" iconOnly label="Delete" />
     </div>
   ),

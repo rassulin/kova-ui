@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/preact';
 import { h } from 'preact';
-import { Grid, Stack, Progress, Skeleton, Divider, Kbd, Code } from './Grid';
+import { Code, Divider, Grid, Kbd, Skeleton, Stack } from './Grid';
 import { Card } from '../Card/Card';
 
 const meta: Meta = {

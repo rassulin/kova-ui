@@ -1,13 +1,32 @@
 @use '../../tokens' as t;
 
 .k-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: t.$font-display; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 3px 9px; border-radius: var(--k-r-pill); line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: t.$font-display;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: t.$r-pill;
+  line-height: 1;
 
-  &-dot::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; }
+  &-dot::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+  }
 
   @each $name, $vals in t.$badge-variants {
-    &-#{$name} { background: nth($vals,1); color: nth($vals,2); border: 0.5px solid nth($vals,3); }
+    &-#{$name} {
+      background: nth($vals, 1);
+      color: nth($vals, 2);
+      border: 0.5px solid nth($vals, 3);
+    }
   }
 }

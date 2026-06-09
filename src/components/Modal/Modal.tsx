@@ -1,5 +1,5 @@
 import './modal.scss';
-import { h, ComponentChildren } from 'preact';
+import { ComponentChildren, h } from 'preact';
 import { useEffect } from 'preact/hooks';
 import { createPortal } from 'preact/compat';
 
@@ -45,6 +45,7 @@ export function Modal({
   const content = (
     <div
       class="k-modal-overlay"
+      role="presentation"
       onClick={
         closeOnOverlay
           ? (e: MouseEvent) => {

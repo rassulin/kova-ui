@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'preact/hooks';
+import { useCallback, useState } from 'preact/hooks';
 
 /**
  * Persists state in localStorage with a JSON-serialised value.
@@ -36,7 +36,9 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       window.localStorage.removeItem(key);
       setStoredValue(initialValue);
-    } catch {}
+    } catch {
+      // ignore (quota, private mode, SSR)
+    }
   }, [key, initialValue]);
 
   return [storedValue, setValue, remove] as const;

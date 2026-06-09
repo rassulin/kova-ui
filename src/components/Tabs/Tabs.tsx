@@ -1,5 +1,5 @@
 import './tabs.scss';
-import { h, ComponentChildren } from 'preact';
+import { ComponentChildren, h } from 'preact';
 import { useState } from 'preact/hooks';
 
 export interface Tab {

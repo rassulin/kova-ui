@@ -1,5 +1,5 @@
 import './typography.scss';
-import { h, ComponentChildren, JSX } from 'preact';
+import { ComponentChildren, h, JSX } from 'preact';
 
 // ─── Shared types ─────────────────────────────────────────────────────────────
 
@@ -8,12 +8,6 @@ export type DisplaySize = 'sm' | 'md' | 'lg' | 'xl';
 export type TextWeight = 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold';
 export type TextColor = 'default' | 'muted' | 'subtle' | 'accent' | 'success' | 'danger' | 'warning';
 export type BannerVariant = 'info' | 'success' | 'warning' | 'danger' | 'neutral';
-
-type AsProp<T extends keyof JSX.IntrinsicElements = 'p'> = {
-  as?: T;
-  // biome-ignore lint/suspicious/noExplicitAny: polymorphic as prop requires index signature
-  [key: string]: any;
-};
 
 function cls(...parts: (string | undefined | false | null)[]) {
   return parts.filter(Boolean).join(' ');
@@ -33,7 +27,6 @@ export interface HeadingProps {
 
 function Heading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   return function HeadingEl({ as, weight, color, class: className = '', children, ...rest }: HeadingProps) {
-    // biome-ignore lint/suspicious/noExplicitAny: polymorphic as prop
     const Tag = (as ?? `h${level}`) as any;
     return (
       <Tag
@@ -90,7 +83,6 @@ export interface TextProps {
   class?: string;
   style?: JSX.CSSProperties;
   children?: ComponentChildren;
-  // biome-ignore lint/suspicious/noExplicitAny: index signature for polymorphic spread
   [key: string]: any;
 }
 
@@ -106,7 +98,6 @@ function Text({
   children,
   ...rest
 }: TextProps) {
-  // biome-ignore lint/suspicious/noExplicitAny: polymorphic as prop
   const Tag2 = Tag as any;
   return (
     <Tag2
@@ -139,7 +130,6 @@ export interface MonoProps {
 }
 
 function Mono({ size, color, as: Tag = 'p', class: className = '', children, ...rest }: MonoProps) {
-  // biome-ignore lint/suspicious/noExplicitAny: polymorphic as prop
   const Tag2 = Tag as any;
   return (
     <Tag2
@@ -164,7 +154,6 @@ export interface LinkProps {
   style?: JSX.CSSProperties;
   onClick?: (e: MouseEvent) => void;
   children?: ComponentChildren;
-  // biome-ignore lint/suspicious/noExplicitAny: index signature for polymorphic spread
   [key: string]: any;
 }
 
@@ -179,7 +168,6 @@ function Link({
   children,
   ...rest
 }: LinkProps) {
-  // biome-ignore lint/suspicious/noExplicitAny: polymorphic as prop
   const Tag2 = Tag as any;
   const externalProps = external && Tag === 'a' ? { target: '_blank', rel: 'noopener noreferrer' } : {};
 
@@ -235,7 +223,7 @@ export interface BannerProps {
 
 const BANNER_ICONS: Record<BannerVariant, ComponentChildren> = {
   info: (
-    <svg aria-hidden="true"
+    <svg
       width="15"
       height="15"
       viewBox="0 0 24 24"
@@ -250,7 +238,7 @@ const BANNER_ICONS: Record<BannerVariant, ComponentChildren> = {
     </svg>
   ),
   success: (
-    <svg aria-hidden="true"
+    <svg
       width="15"
       height="15"
       viewBox="0 0 24 24"
@@ -264,7 +252,7 @@ const BANNER_ICONS: Record<BannerVariant, ComponentChildren> = {
     </svg>
   ),
   warning: (
-    <svg aria-hidden="true"
+    <svg
       width="15"
       height="15"
       viewBox="0 0 24 24"
@@ -279,7 +267,7 @@ const BANNER_ICONS: Record<BannerVariant, ComponentChildren> = {
     </svg>
   ),
   danger: (
-    <svg aria-hidden="true"
+    <svg
       width="15"
       height="15"
       viewBox="0 0 24 24"
@@ -294,7 +282,7 @@ const BANNER_ICONS: Record<BannerVariant, ComponentChildren> = {
     </svg>
   ),
   neutral: (
-    <svg aria-hidden="true"
+    <svg
       width="15"
       height="15"
       viewBox="0 0 24 24"
@@ -330,9 +318,8 @@ function Banner({
         {children && <div class="k-banner-desc">{children}</div>}
       </div>
       {dismissible && (
-        <button type="button" class="k-banner-dismiss" onClick={onDismiss} aria-label="Dismiss">
+        <button class="k-banner-dismiss" onClick={onDismiss} aria-label="Dismiss">
           <svg
-            aria-hidden="true"
             width="14"
             height="14"
             viewBox="0 0 24 24"

@@ -1,5 +1,5 @@
 import './card.scss';
-import { h, ComponentChildren } from 'preact';
+import { ComponentChildren, h } from 'preact';
 
 export interface CardProps {
   title?: string;
@@ -18,6 +18,15 @@ export function Card({ title, subtitle, glow, footer, class: className = '', chi
         .filter(Boolean)
         .join(' ')}
       onClick={onClick}
+      onKeyDown={
+        onClick
+          ? (e: KeyboardEvent) => {
+              if (e.key === 'Enter' || e.key === ' ') onClick();
+            }
+          : undefined
+      }
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
       style={onClick ? { cursor: 'pointer' } : {}}
     >
       {(title || subtitle) && (

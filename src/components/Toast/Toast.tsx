@@ -1,6 +1,6 @@
 import './toast.scss';
 import { h } from 'preact';
-import { useState, useCallback } from 'preact/hooks';
+import { useCallback, useState } from 'preact/hooks';
 import { createPortal } from 'preact/compat';
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info';

@@ -1,20 +1,68 @@
 @use '../../tokens' as t;
 
 .k-tabs {
-  display: flex; flex-direction: column; gap: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   &-line {
-    .k-tab-list { background: transparent; border: none; border-bottom: 0.5px solid t.$border; border-radius: 0; gap: 0; padding: 0; width: 100%; }
-    .k-tab { border-radius: 0; padding: 10px 20px; border-bottom: 2px solid transparent; margin-bottom: -0.5px; }
-    .k-tab-active { background: transparent; border-bottom-color: t.$accent; color: t.$accent-light; box-shadow: none; }
+    .k-tab-list {
+      background: transparent;
+      border: none;
+      border-bottom: 0.5px solid t.$border;
+      border-radius: 0;
+      gap: 0;
+      padding: 0;
+      width: 100%;
+    }
+    .k-tab {
+      border-radius: 0;
+      padding: 10px 20px;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -0.5px;
+    }
+    .k-tab-active {
+      background: transparent;
+      border-bottom-color: t.$accent;
+      color: t.$accent-light;
+      box-shadow: none;
+    }
   }
 }
 
-.k-tab-list { display: flex; gap: 2px; padding: 3px; background: t.$surface-2; border: 0.5px solid t.$border; border-radius: var(--k-r-md); width: fit-content; }
-.k-tab {
-  padding: 7px 16px; font-family: t.$font-display; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: t.$text-muted; background: transparent; border: none; border-radius: var(--k-r-sm); cursor: pointer;
-  transition: color t.$dur-fast, background t.$dur-fast; white-space: nowrap;
-  &:hover    { color: t.$text; }
-  &-active   { color: t.$text; background: t.$surface-3; box-shadow: t.$shadow-sm; }
+.k-tab-list {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: t.$surface-2;
+  border: 0.5px solid t.$border;
+  border-radius: t.$r-md;
+  width: fit-content;
 }
-.k-tab-panel { padding: 1.5rem 0; }
+.k-tab {
+  padding: 7px 16px;
+  font-family: t.$font-display;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: t.$text-muted;
+  background: transparent;
+  border: none;
+  border-radius: t.$r-sm;
+  cursor: pointer;
+  transition:
+    color t.$dur-fast,
+    background t.$dur-fast;
+  white-space: nowrap;
+  &:hover {
+    color: t.$text;
+  }
+  &-active {
+    color: t.$text;
+    background: t.$surface-3;
+    box-shadow: t.$shadow-sm;
+  }
+}
+.k-tab-panel {
+  padding: 1.5rem 0;
+}

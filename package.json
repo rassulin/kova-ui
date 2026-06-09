@@ -96,8 +96,29 @@
       "import": "./dist/esm/components/Grid/Grid.js",
       "require": "./dist/cjs/components/Grid/Grid.js",
       "types": "./dist/components/Grid/Grid.d.ts"
+    },
+    "./components/Checkbox": {
+      "import": "./dist/esm/components/Checkbox/Checkbox.js",
+      "require": "./dist/cjs/components/Checkbox/Checkbox.js",
+      "types": "./dist/components/Checkbox/Checkbox.d.ts"
+    },
+    "./components/Icon": {
+      "import": "./dist/esm/components/Icon/Icon.js",
+      "require": "./dist/cjs/components/Icon/Icon.js",
+      "types": "./dist/components/Icon/Icon.d.ts"
+    },
+    "./components/DatePicker": {
+      "import": "./dist/esm/components/DatePicker/DatePicker.js",
+      "require": "./dist/cjs/components/DatePicker/DatePicker.js",
+      "types": "./dist/components/DatePicker/DatePicker.d.ts"
+    },
+    "./components/Typography": {
+      "import": "./dist/esm/components/Typography/Typography.js",
+      "require": "./dist/cjs/components/Typography/Typography.js",
+      "types": "./dist/components/Typography/Typography.d.ts"
     }
   },
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -107,16 +128,18 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "biome check src/",
-    "lint:fix": "biome check --write src/",
-    "format": "biome format --write src/",
-    "check": "biome check src/",
+    "lint": "eslint src/",
+    "lint:fix": "eslint --fix src/",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "check": "npm run lint && npm run format:check",
     "prepare": "simple-git-hooks"
   },
   "peerDependencies": {
     "preact": ">=10.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "9.39.4",
     "@preact/preset-vite": "^2.8.3",
     "@storybook/addon-essentials": "8.6.18",
     "@storybook/blocks": "8.6.18",
@@ -124,13 +147,19 @@
     "@storybook/preact-vite": "8.6.18",
     "@vitest/browser-playwright": "^4.1.7",
     "@vitest/coverage-v8": "^4.1.7",
+    "eslint": "9.39.4",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
     "lint-staged": "^17.0.7",
     "playwright": "^1.60.0",
     "preact": "^10.22.0",
+    "prettier": "3.8.3",
     "sass": "^1.100.0",
     "simple-git-hooks": "^2.13.1",
     "storybook": "8.6.18",
     "typescript": "^5.4.0",
+    "typescript-eslint": "8.61.0",
     "vite": "^5.2.0",
     "vite-plugin-dts": "^3.9.1",
     "vitest": "^4.1.7"
@@ -152,7 +181,11 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
-      "biome check --write --no-errors-on-unmatched"
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.scss": [
+      "prettier --write"
     ]
   }
 }

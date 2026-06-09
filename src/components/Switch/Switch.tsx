@@ -1,5 +1,6 @@
 import './switch.scss';
 import { h } from 'preact';
+import { useState } from 'preact/hooks';
 import { generateId } from '../../utils/generateId';
 
 export interface SwitchProps {
@@ -12,24 +13,20 @@ export interface SwitchProps {
 }
 
 export function Switch({ checked, onChange, label, disabled, id, class: className = '' }: SwitchProps) {
-  const uid = id ?? generateId('sw');
-
+  const [generatedId] = useState(() => generateId('k-switch'));
+  const uid = id || generatedId;
   return (
-    <label class={['k-switch-wrap', className].filter(Boolean).join(' ')} htmlFor={uid}>
+    <label class={['k-switch-wrap', disabled ? 'k-disabled' : '', className].filter(Boolean).join(' ')} for={uid}>
       <span class="k-switch">
-        {/* Native input — full overlay, transparent */}
         <input
           type="checkbox"
           id={uid}
           checked={checked}
           disabled={disabled}
-          onChange={(e: Event) => onChange?.((e.target as HTMLInputElement).checked)}
-          aria-checked={checked}
+          onChange={(e: any) => onChange?.(e.currentTarget.checked)}
         />
-        {/* Track contains the thumb so overflow:hidden clips correctly */}
-        <span class="k-switch-track">
-          <span class="k-switch-thumb" />
-        </span>
+        <span class="k-switch-track" />
+        <span class="k-switch-thumb" />
       </span>
       {label && <span class="k-switch-label">{label}</span>}
     </label>
