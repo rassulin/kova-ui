@@ -59,6 +59,14 @@ const demoTabs = [
   },
 ];
 
+export const Default: Story = {
+  render: ({ variant }) => (
+    <div style={{ width: '480px' }}>
+      <Tabs tabs={demoTabs} defaultKey="overview" variant={variant} />
+    </div>
+  ),
+};
+
 export const Pill: Story = {
   name: 'Pill (default)',
   render: () => (

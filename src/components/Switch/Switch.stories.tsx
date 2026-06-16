@@ -23,6 +23,7 @@ import { Switch } from 'kova-ui'
   argTypes: {
     label: { control: 'text' },
     disabled: { control: 'boolean' },
+    checked: { control: 'boolean' },
   },
 } satisfies Meta<typeof Switch>;
 
@@ -30,13 +31,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => {
-    function Demo() {
-      const [on, setOn] = useState(false);
-      return <Switch checked={on} onChange={setOn} label={on ? 'Enabled' : 'Disabled'} />;
-    }
-    return <Demo />;
-  },
+  render: ({ checked, disabled, label = 'Enabled' }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      <Switch checked={checked} onChange={val => (checked = val)} disabled={disabled} label={label} />
+    </div>
+  ),
 };
 
 export const AllStates: Story = {
