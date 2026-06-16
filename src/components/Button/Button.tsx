@@ -71,7 +71,7 @@ export function Button({
       ) : (
         icon && <Icon name={icon} size={sz} />
       )}
-      {!iconOnly && children && <span class="k-btn-text">{children}</span>}
+      {iconOnly ? !icon && !loading && children : children && <span class="k-btn-text">{children}</span>}
       {!loading && iconRight && <Icon name={iconRight} size={sz} />}
     </>
   );

@@ -1,7 +1,13 @@
 import type { Preview } from '@storybook/preact';
+import { h, Fragment } from 'preact';
 import '../src/styles.scss';
+import { SpriteSheet } from '../src/components/Icon/Icon';
 
 const preview: Preview = {
+  decorators: [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (Story: any) => h(Fragment, null, h(SpriteSheet, null), h(Story, null)),
+  ],
   parameters: {
     backgrounds: {
       default: 'kova-dark',

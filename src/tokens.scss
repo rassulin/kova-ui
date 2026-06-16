@@ -5,121 +5,178 @@
 // ── Static SCSS variables (compile-time, accent palette + spacing) ────────────
 // These never change between themes.
 
-$accent:       #8b5cf6;
-$accent-glow:  rgba(139, 92, 246, 0.25);
-$accent-light: #a78bfa;
-$cyan:         #22d3ee;
-$cyan-glow:    rgba(34, 211, 238, 0.2);
-$green:        #4ade80;
-$amber:        #fbbf24;
-$red:          #f87171;
-$pink:         #f472b6;
+$accent: var(--k-accent);
+$accent-glow: var(--k-accent-glow);
+$accent-light: var(--k-accent-light);
+$cyan: #22d3ee;
+$cyan-glow: rgba(34, 211, 238, 0.2);
+$green: #4ade80;
+$amber: #fbbf24;
+$red: #f87171;
+$pink: #f472b6;
 
 $font-display: 'Syne', sans-serif;
-$font-mono:    'DM Mono', monospace;
+$font-mono: 'DM Mono', monospace;
 
-$r-sm:   6px;
-$r-md:   10px;
-$r-lg:   16px;
-$r-xl:   24px;
-$r-pill: 9999px;
+$r-sm: var(--k-r-sm);
+$r-md: var(--k-r-md);
+$r-lg: var(--k-r-lg);
+$r-xl: var(--k-r-xl);
+$r-pill: var(--k-r-pill);
 
-$ease:        cubic-bezier(0.16, 1, 0.3, 1);
+$ease: cubic-bezier(0.16, 1, 0.3, 1);
 $ease-snappy: cubic-bezier(0.4, 0, 0.2, 1);
-$dur-fast:    120ms;
-$dur-base:    200ms;
-$dur-slow:    350ms;
+$dur-fast: 120ms;
+$dur-base: 200ms;
+$dur-slow: 350ms;
 
 // ── Theme-aware SCSS variables — resolve to CSS custom properties ──────────────
 // Use these in component SCSS files. They pick up whichever theme is active.
 
-$bg:           var(--k-bg);
-$surface-1:    var(--k-surface-1);
-$surface-2:    var(--k-surface-2);
-$surface-3:    var(--k-surface-3);
-$border:       var(--k-border);
+$bg: var(--k-bg);
+$surface-1: var(--k-surface-1);
+$surface-2: var(--k-surface-2);
+$surface-3: var(--k-surface-3);
+$border: var(--k-border);
 $border-hover: var(--k-border-hover);
 $border-focus: var(--k-border-focus);
-$text:         var(--k-text);
-$text-muted:   var(--k-text-muted);
-$text-subtle:  var(--k-text-subtle);
+$text: var(--k-text);
+$text-muted: var(--k-text-muted);
+$text-subtle: var(--k-text-subtle);
 
 // Derived shadows (reference CSS vars so they flip with theme)
-$shadow-sm:     var(--k-shadow-sm);
-$shadow-md:     var(--k-shadow-md);
-$shadow-lg:     var(--k-shadow-lg);
-$shadow-accent: 0 0 0 1px #{$accent}, 0 0 20px #{$accent-glow};
-$shadow-cyan:   0 0 0 1px #{$cyan},   0 0 20px #{$cyan-glow};
+$shadow-sm: var(--k-shadow-sm);
+$shadow-md: var(--k-shadow-md);
+$shadow-lg: var(--k-shadow-lg);
+$shadow-accent:
+  0 0 0 1px #{$accent},
+  0 0 20px #{$accent-glow};
+$shadow-cyan:
+  0 0 0 1px #{$cyan},
+  0 0 20px #{$cyan-glow};
 
 // Variant maps (used with @each in Badge, Button, Toast)
 $badge-variants: (
-  'default': (var(--k-surface-3), var(--k-text-muted),  var(--k-border)),
-  'accent':  (rgba(139, 92, 246, 0.18), $accent-light,  rgba(139, 92, 246, 0.3)),
-  'cyan':    (rgba(34, 211, 238, 0.12), $cyan,           rgba(34, 211, 238, 0.25)),
-  'success': (rgba(74, 222, 128, 0.1),  $green,          rgba(74, 222, 128, 0.2)),
-  'warning': (rgba(251, 191, 36, 0.1),  $amber,          rgba(251, 191, 36, 0.2)),
-  'danger':  (rgba(248, 113, 113, 0.1), $red,            rgba(248, 113, 113, 0.2)),
-  'pink':    (rgba(244, 114, 182, 0.1), $pink,            rgba(244, 114, 182, 0.2)),
+  'default': (
+    var(--k-surface-3),
+    var(--k-text-muted),
+    var(--k-border),
+  ),
+  'accent': (
+    rgba(139, 92, 246, 0.18),
+    $accent-light,
+    rgba(139, 92, 246, 0.3),
+  ),
+  'cyan': (
+    rgba(34, 211, 238, 0.12),
+    $cyan,
+    rgba(34, 211, 238, 0.25),
+  ),
+  'success': (
+    rgba(74, 222, 128, 0.1),
+    $green,
+    rgba(74, 222, 128, 0.2),
+  ),
+  'warning': (
+    rgba(251, 191, 36, 0.1),
+    $amber,
+    rgba(251, 191, 36, 0.2),
+  ),
+  'danger': (
+    rgba(248, 113, 113, 0.1),
+    $red,
+    rgba(248, 113, 113, 0.2),
+  ),
+  'pink': (
+    rgba(244, 114, 182, 0.1),
+    $pink,
+    rgba(244, 114, 182, 0.2),
+  ),
 );
 
 $button-sizes: (
-  'xs': (28px, 12px, 11px, $r-sm),
-  'sm': (34px, 16px, 12px, $r-md),
-  'md': (40px, 20px, 13px, $r-md),
-  'lg': (48px, 28px, 14px, $r-lg),
-  'xl': (56px, 36px, 15px, $r-lg),
+  'xs': (
+    28px,
+    12px,
+    11px,
+    $r-sm,
+  ),
+  'sm': (
+    34px,
+    16px,
+    12px,
+    $r-md,
+  ),
+  'md': (
+    40px,
+    20px,
+    13px,
+    $r-md,
+  ),
+  'lg': (
+    48px,
+    28px,
+    14px,
+    $r-lg,
+  ),
+  'xl': (
+    56px,
+    36px,
+    15px,
+    $r-lg,
+  ),
 );
 
 // ── CSS custom properties ─────────────────────────────────────────────────────
 // Accent + typography + spacing never change. Surfaces flip per theme.
 
 :root {
-  // Accent palette
-  --k-accent:       #{$accent};
-  --k-accent-glow:  #{$accent-glow};
-  --k-accent-light: #{$accent-light};
-  --k-cyan:         #{$cyan};
-  --k-cyan-glow:    #{$cyan-glow};
-  --k-green:        #{$green};
-  --k-amber:        #{$amber};
-  --k-red:          #{$red};
-  --k-pink:         #{$pink};
+  // Accent palette — hardcoded base values (overridable via KovaTheme accent prop)
+  --k-accent: #8b5cf6;
+  --k-accent-glow: rgba(139, 92, 246, 0.25);
+  --k-accent-light: #a78bfa;
+  --k-cyan: #22d3ee;
+  --k-cyan-glow: rgba(34, 211, 238, 0.2);
+  --k-green: #4ade80;
+  --k-amber: #fbbf24;
+  --k-red: #f87171;
+  --k-pink: #f472b6;
 
   // Typography
   --k-font-display: #{$font-display};
-  --k-font-mono:    #{$font-mono};
+  --k-font-mono: #{$font-mono};
 
-  // Radius
-  --k-r-sm:   #{$r-sm};
-  --k-r-md:   #{$r-md};
-  --k-r-lg:   #{$r-lg};
-  --k-r-xl:   #{$r-xl};
-  --k-r-pill: #{$r-pill};
+  // Radius — hardcoded base values (overridable via KovaTheme radius prop)
+  --k-r-sm: 6px;
+  --k-r-md: 10px;
+  --k-r-lg: 16px;
+  --k-r-xl: 24px;
+  --k-r-pill: 9999px;
 
   // Motion
-  --k-ease:        #{$ease};
+  --k-ease: #{$ease};
   --k-ease-snappy: #{$ease-snappy};
-  --k-dur-fast:    #{$dur-fast};
-  --k-dur-base:    #{$dur-base};
-  --k-dur-slow:    #{$dur-slow};
+  --k-dur-fast: #{$dur-fast};
+  --k-dur-base: #{$dur-base};
+  --k-dur-slow: #{$dur-slow};
 }
 
 // ── Dark theme (default) ──────────────────────────────────────────────────────
 :root,
-[data-theme="dark"] {
+[data-theme='dark'] {
   color-scheme: dark;
 
-  --k-bg:           #0d0d0f;
-  --k-surface-1:    #111114;
-  --k-surface-2:    #18181c;
-  --k-surface-3:    #222228;
-  --k-border:       rgba(255, 255, 255, 0.07);
+  --k-bg: #0d0d0f;
+  --k-surface-1: #111114;
+  --k-surface-2: #18181c;
+  --k-surface-3: #222228;
+  --k-border: rgba(255, 255, 255, 0.07);
   --k-border-hover: rgba(255, 255, 255, 0.14);
   --k-border-focus: rgba(139, 92, 246, 0.6);
 
-  --k-text:         #f5f5f7;
-  --k-text-muted:   #8b8b99;
-  --k-text-subtle:  #55555f;
+  --k-text: #f5f5f7;
+  --k-text-muted: #8b8b99;
+  --k-text-subtle: #55555f;
 
   --k-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.05);
   --k-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
@@ -127,20 +184,20 @@ $button-sizes: (
 }
 
 // ── Light theme ───────────────────────────────────────────────────────────────
-[data-theme="light"] {
+[data-theme='light'] {
   color-scheme: light;
 
-  --k-bg:           #f8f8fc;
-  --k-surface-1:    #ffffff;
-  --k-surface-2:    #f1f1f6;
-  --k-surface-3:    #e4e4ee;
-  --k-border:       rgba(0, 0, 0, 0.08);
+  --k-bg: #f8f8fc;
+  --k-surface-1: #ffffff;
+  --k-surface-2: #f1f1f6;
+  --k-surface-3: #e4e4ee;
+  --k-border: rgba(0, 0, 0, 0.08);
   --k-border-hover: rgba(0, 0, 0, 0.16);
   --k-border-focus: rgba(139, 92, 246, 0.5);
 
-  --k-text:         #0f0f14;
-  --k-text-muted:   #5a5a72;
-  --k-text-subtle:  #9090aa;
+  --k-text: #0f0f14;
+  --k-text-muted: #5a5a72;
+  --k-text-subtle: #9090aa;
 
   --k-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0.5px rgba(0, 0, 0, 0.05);
   --k-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1), 0 0 0 0.5px rgba(0, 0, 0, 0.06);

@@ -1,6 +1,7 @@
 import './datepicker.scss';
 import { h } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
+import { createPortal } from 'preact/compat';
 import { generateId } from '../../utils/generateId';
 
 const DAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -102,6 +103,7 @@ export function DatePicker({
   const [viewYear, setViewYear] = useState((value ?? today).getFullYear());
   const [viewMonth, setViewMonth] = useState((value ?? today).getMonth());
   const [inputVal, setInputVal] = useState(value ? formatDate(value, format) : '');
+  const [popoverPos, setPopoverPos] = useState({ top: 0, left: 0, width: 280, flipY: false });
   const wrapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const id = useRef(generateId('dp')).current;
@@ -116,14 +118,42 @@ export function DatePicker({
     }
   }, [value, format]);
 
-  // Close on outside click
+  function calcPos() {
+    if (!wrapRef.current) return;
+    const rect = wrapRef.current.getBoundingClientRect();
+    const GAP = 6;
+    const POPUP_H = 320;
+    const popupW = Math.max(rect.width, 280);
+
+    const spaceBelow = window.innerHeight - rect.bottom - GAP;
+    const spaceAbove = rect.top - GAP;
+    const flipY = spaceBelow < POPUP_H && spaceAbove > spaceBelow;
+
+    const top = flipY ? rect.top - POPUP_H - GAP : rect.bottom + GAP;
+
+    let left = rect.left;
+    if (left + popupW > window.innerWidth - 8) left = window.innerWidth - popupW - 8;
+    if (left < 8) left = 8;
+
+    setPopoverPos({ top, left, width: popupW, flipY });
+  }
+
+  // Close on outside click or scroll
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    const onMouseDown = (e: MouseEvent) => {
+      const portal = document.querySelector('.k-dp-portal');
+      if (wrapRef.current?.contains(e.target as Node)) return;
+      if (portal && portal.contains(e.target as Node)) return;
+      setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    const onScroll = () => setOpen(false);
+    document.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('scroll', onScroll, true);
+    return () => {
+      document.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('scroll', onScroll, true);
+    };
   }, [open]);
 
   // Close on Escape
@@ -205,50 +235,17 @@ export function DatePicker({
 
   const ph = placeholder ?? format.toLowerCase();
 
-  return (
-    <div class={['k-dp-wrap', className].filter(Boolean).join(' ')} ref={wrapRef}>
-      {label && (
-        <label class="k-label" for={id}>
-          {label}
-        </label>
-      )}
-
-      <div class="k-dp-input-row">
-        <div class="k-input-field-wrap">
-          <input
-            id={id}
-            ref={inputRef}
-            class={['k-input', 'k-dp-input', error ? 'k-input-error' : ''].filter(Boolean).join(' ')}
-            type="text"
-            value={inputVal}
-            placeholder={ph}
-            disabled={disabled}
-            role="combobox"
-            aria-haspopup="dialog"
-            aria-expanded={open}
-            aria-controls={popupId}
-            onInput={handleInputChange}
-            onFocus={() => !disabled && setOpen(true)}
-            readOnly
-          />
-          <button
-            class="k-dp-icon-btn"
-            tabIndex={-1}
-            disabled={disabled}
-            aria-label="Open calendar"
-            onClick={() => !disabled && setOpen(o => !o)}
-            type="button"
-          >
-            <CalendarIcon />
-          </button>
-        </div>
-      </div>
-
-      {error && <span class="k-error-msg">{error}</span>}
-      {hint && !error && <span class="k-hint">{hint}</span>}
-
-      {open && (
-        <div id={popupId} class="k-dp-popover" role="dialog" aria-label="Date picker">
+  const popover = open
+    ? createPortal(
+        <div
+          id={popupId}
+          class={['k-dp-popover', 'k-dp-portal', popoverPos.flipY ? 'k-dp-popover--flip' : '']
+            .filter(Boolean)
+            .join(' ')}
+          role="dialog"
+          aria-label="Date picker"
+          style={{ top: `${popoverPos.top}px`, left: `${popoverPos.left}px`, width: `${popoverPos.width}px` }}
+        >
           {/* Header */}
           <div class="k-dp-header">
             <button class="k-dp-nav" onClick={prevMonth} aria-label="Previous month" type="button">
@@ -328,8 +325,64 @@ export function DatePicker({
               Clear
             </button>
           </div>
-        </div>
+        </div>,
+        document.body,
+      )
+    : null;
+
+  return (
+    <div class={['k-dp-wrap', className].filter(Boolean).join(' ')} ref={wrapRef}>
+      {label && (
+        <label class="k-label" for={id}>
+          {label}
+        </label>
       )}
+
+      <div class="k-dp-input-row">
+        <div class="k-input-field-wrap">
+          <input
+            id={id}
+            ref={inputRef}
+            class={['k-input', 'k-dp-input', error ? 'k-input-error' : ''].filter(Boolean).join(' ')}
+            type="text"
+            value={inputVal}
+            placeholder={ph}
+            disabled={disabled}
+            role="combobox"
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            aria-controls={popupId}
+            onInput={handleInputChange}
+            onFocus={() => {
+              if (!disabled) {
+                calcPos();
+                setOpen(true);
+              }
+            }}
+            readOnly
+          />
+          <button
+            class="k-dp-icon-btn"
+            tabIndex={-1}
+            disabled={disabled}
+            aria-label="Open calendar"
+            onClick={() => {
+              if (!disabled) {
+                calcPos();
+                setOpen(o => !o);
+              }
+            }}
+            type="button"
+          >
+            <CalendarIcon />
+          </button>
+        </div>
+      </div>
+
+      {error && <span class="k-error-msg">{error}</span>}
+      {hint && !error && <span class="k-hint">{hint}</span>}
+
+      {popover}
     </div>
   );
 }

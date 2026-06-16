@@ -52,9 +52,10 @@ const faqItems = [
 ];
 
 export const Default: Story = {
-  render: () => (
+  args: { multiple: false },
+  render: args => (
     <div style={{ width: '520px' }}>
-      <Accordion items={faqItems} defaultOpen={['q1']} />
+      <Accordion items={faqItems} defaultOpen={['q1']} multiple={args.multiple} />
     </div>
   ),
 };

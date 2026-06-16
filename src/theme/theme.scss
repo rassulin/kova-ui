@@ -21,9 +21,24 @@
     scrollbar-width: thin;
     scrollbar-color: rgba(139, 92, 246, 0.35) transparent;
 
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(139, 92, 246, 0.35) transparent;
+    }
+
     *::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 4px;
+      height: 4px;
+    }
+
+    *::-webkit-scrollbar-button,
+    *::-webkit-scrollbar-button:start,
+    *::-webkit-scrollbar-button:end,
+    *::-webkit-scrollbar-button:start:decrement,
+    *::-webkit-scrollbar-button:end:increment {
+      display: none;
+      height: 0;
+      width: 0;
     }
 
     *::-webkit-scrollbar-track {

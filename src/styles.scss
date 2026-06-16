@@ -2,7 +2,6 @@
 
 @use './tokens';
 @use './theme/theme';
-
 @use './components/Icon/icon';
 @use './components/Button/button';
 @use './components/Spinner/spinner';
@@ -24,3 +23,49 @@
 @use './components/Typography/typography';
 @use './components/DatePicker/datepicker';
 @use './components/Checkbox/checkbox';
+
+// Global font baseline — ensures portals + body-level nodes inherit Syne
+html,
+body {
+  font-family: var(--k-font-display);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// ── Global scrollbar — thin, no arrows ───────────────────────────────────────
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}

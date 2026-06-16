@@ -28,8 +28,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => (
-    <Breadcrumb items={[{ label: 'Home', href: '#' }, { label: 'Projects', href: '#' }, { label: 'kova-ui' }]} />
+  args: { separator: '/' },
+  render: args => (
+    <Breadcrumb
+      separator={args.separator}
+      items={[{ label: 'Home', href: '#' }, { label: 'Projects', href: '#' }, { label: 'kova-ui' }]}
+    />
   ),
 };
 
